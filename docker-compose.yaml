@@ -7,8 +7,5 @@ services:
     build:
       context: "./Microservice Prototype"
       dockerfile: "Dockerfile"
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
-      Logging__Console__FormatterName: "simple"
     ports:
       - "8090:80"
