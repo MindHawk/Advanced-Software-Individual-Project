@@ -1,6 +1,29 @@
 version: "3.7"
 
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  producer:
+    container_name: producer
+    restart: always
+    build:
+      context: "./Microservice Producer"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8091:80"
+  consumer:
+    container_name: consumer
+    restart: always
+    build:
+      context: "./Microservice Consumer"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8092:80"
   prototype:
     container_name: prototype
     restart: always
