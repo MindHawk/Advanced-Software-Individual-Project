@@ -8,6 +8,14 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  forumService:
+    container_name: forumService
+    restart: always
+    build:
+      context: "./ForumService"
+      dockerfile: "ForumServiceAPI/Dockerfile"
+    ports:
+      - "8091:80"
   producer:
     container_name: producer
     restart: always
