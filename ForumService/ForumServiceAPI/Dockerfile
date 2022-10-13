@@ -8,6 +8,10 @@ ENV Logging__Console__FormatterName=simple
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ForumServiceAPI/ForumServiceAPI.csproj", "ForumServiceAPI/"]
+COPY ["ForumServiceDAL/ForumServiceDAL.csproj", "ForumServiceDAL/"]
+COPY ["ForumServiceLogic/ForumServiceLogic.csproj", "ForumServiceLogic/"]
+COPY ["ForumServiceModels/ForumServiceModels.csproj", "ForumServiceModels/"]
+COPY ["ForumServiceMessageBus/ForumServiceMessageBus.csproj", "ForumServiceMessageBus/"]
 RUN dotnet restore "ForumServiceAPI/ForumServiceAPI.csproj"
 COPY . .
 WORKDIR "/src/ForumServiceAPI"
