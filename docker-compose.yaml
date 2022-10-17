@@ -15,7 +15,9 @@ services:
       context: "./ForumService"
       dockerfile: "ForumServiceAPI/Dockerfile"
     ports:
-      - "8093:80"
+      - "8090:80"
+    depends_on:
+      - rabbitmq
   producer:
     container_name: producer
     restart: always
@@ -24,6 +26,8 @@ services:
       dockerfile: "Dockerfile"
     ports:
       - "8091:80"
+    depends_on:
+      - rabbitmq
 #  consumer:
 #    container_name: consumer
 #    restart: always

@@ -23,7 +23,7 @@ public class MessageBusListener : BackgroundService
         _scopeFactory = scopeFactory;
         _logger = logger;
         
-        var factory = new ConnectionFactory() { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory() { HostName = _configuration["RabbitMQ:Host"] };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
         _channel.ExchangeDeclare(exchange:"test-exchange", type:ExchangeType.Direct);
