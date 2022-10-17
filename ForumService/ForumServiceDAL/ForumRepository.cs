@@ -12,31 +12,31 @@ public class ForumRepository : IForumRepository
         _context = context;
         context.Database.Migrate();
     }
-    public Forum getForum(int id)
+    public Forum GetForum(int id)
     {
         return _context.Forums.Find(id);
     }
 
-    public IEnumerable<Forum> getForums()
+    public IEnumerable<Forum> GetForums()
     {
         return _context.Forums.ToList();
     }
 
-    public void addForum(Forum forum)
+    public void AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
         _context.SaveChanges();
     }
 
-    public void updateForum(Forum forum)
+    public void UpdateForum(Forum forum)
     {
         _context.Forums.Update(forum);
         _context.SaveChanges();
     }
 
-    public void deleteForum(int id)
+    public void DeleteForum(int id)
     {
-        _context.Forums.Remove(getForum(id));
+        _context.Forums.Remove(GetForum(id));
         _context.SaveChanges();
     }
 }

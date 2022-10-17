@@ -23,7 +23,7 @@ public class ProducerController : ControllerBase
         using(var connection = factory.CreateConnection())
         using(var channel = connection.CreateModel())
         {
-            channel.QueueDeclare(queue: "task_queue",
+            channel.QueueDeclare(queue: "test-exchange",
                 durable: true,
                 exclusive: false,
                 autoDelete: false,
@@ -33,13 +33,13 @@ public class ProducerController : ControllerBase
             var properties = channel.CreateBasicProperties();
             properties.Persistent = true;
 
-            channel.BasicPublish(exchange: "",
-                routingKey: "task_queue",
+            channel.BasicPublish(exchange: "test-exchange",
+                routingKey: "test-key",
                 basicProperties: properties,
                 body: body);
             _logger.Log(LogLevel.Information, "Message bus message sent");
         }
         
-        return Ok();
+        return Ok("Message bus message sent");
     }
 }

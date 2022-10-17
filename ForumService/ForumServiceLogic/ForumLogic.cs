@@ -1,32 +1,38 @@
-﻿using ForumServiceModels;
+﻿using ForumServiceDAL;
+using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 
 namespace ForumServiceLogic;
 
 public class ForumLogic : IForumLogic
 {
-    public Forum getForum(int id)
+    private readonly IForumRepository _repository;
+    public ForumLogic(IForumRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public Forum GetForum(int id)
+    {
+        return _repository.GetForum(id);
     }
 
-    public IEnumerable<Forum> getForums()
+    public IEnumerable<Forum> GetForums()
     {
-        throw new NotImplementedException();
+        return _repository.GetForums();
     }
 
-    public void addForum(Forum forum)
+    public void AddForum(Forum forum)
     {
-        throw new NotImplementedException();
+        _repository.AddForum(forum);
     }
 
-    public void updateForum(Forum forum)
+    public void UpdateForum(Forum forum)
     {
-        throw new NotImplementedException();
+        _repository.UpdateForum(forum);
     }
 
-    public void deleteForum(int id)
+    public void DeleteForum(int id)
     {
-        throw new NotImplementedException();
+        _repository.DeleteForum(id);
     }
 }
