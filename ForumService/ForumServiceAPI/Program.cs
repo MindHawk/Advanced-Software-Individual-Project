@@ -12,13 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 //     connectionString, 
 //     x => x.MigrationsAssembly("ForumService")));
 
-builder.Services.AddLogging();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// builder.Services.AddScoped<IForumRepository, ForumRepository>();
-// builder.Services.AddScoped<IForumLogic, ForumLogic>();
+
+builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
+builder.Services.AddScoped<IForumRepository, ForumRepository>();
+builder.Services.AddScoped<IForumLogic, ForumLogic>();
 builder.Services.AddHostedService<MessageBusListener>().AddLogging();
 
 var app = builder.Build();
@@ -29,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My service");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum Service");
         c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
     });
 }

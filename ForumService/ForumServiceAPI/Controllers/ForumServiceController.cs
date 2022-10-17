@@ -1,3 +1,5 @@
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumServiceAPI.Controllers;
@@ -7,15 +9,26 @@ namespace ForumServiceAPI.Controllers;
 public class ForumServiceController : ControllerBase
 {
     private readonly ILogger<ForumServiceController> _logger;
+    private readonly IForumLogic _forumLogic;
 
-    public ForumServiceController(ILogger<ForumServiceController> logger)
+    public ForumServiceController(ILogger<ForumServiceController> logger, IForumLogic forumLogic)
     {
         _logger = logger;
+        _forumLogic = forumLogic;
     }
 
-    [HttpGet(Name = "Get")]
-    public IActionResult Get()
+    [HttpPost(Name = "PostForum")]
+    public async Task<ActionResult<Forum>> Post(Forum forum)
     {
-        return Ok();
+        _forumLogic.AddForum(forum);
+
+        return Created("GetRoom", forum);
     }
+    
+    [HttpGet(Name = "GetForums")]
+    public async Task<IEnumerable<Forum>> Get()
+    {
+        return _forumLogic.GetForums();
+    }
+
 }
