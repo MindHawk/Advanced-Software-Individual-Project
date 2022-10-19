@@ -8,6 +8,12 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - "8055:8080"
   forum_db:
     container_name: forum_db
     restart: always
