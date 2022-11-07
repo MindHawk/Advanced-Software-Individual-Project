@@ -17,18 +17,38 @@ public class ForumServiceController : ControllerBase
         _forumLogic = forumLogic;
     }
 
-    [HttpPost(Name = "PostForum")]
-    public async Task<ActionResult<Forum>> Post(Forum forum)
+    [HttpGet(Name = "GetForums")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Forum>) )]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetForums()
     {
-        _forumLogic.AddForum(forum);
+        var forums = _forumLogic.GetForums();
+        return Ok(forums);
+    }
 
-        return Created("GetRoom", forum);
+    [HttpGet(Name = "GetForum")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Route("{id:int}")]
+    public IActionResult GetForum(int id)
+    {
+        var forum = _forumLogic.GetForum(id);
+        if (forum is null)
+        {
+            return NotFound();
+        }
+        return Ok(forum);
     }
     
-    [HttpGet(Name = "GetForums")]
-    public async Task<IEnumerable<Forum>> Get()
+    [HttpPost(Name = "PostForum")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Forum))]
+    public IActionResult PostForum(Forum forum)
     {
-        return _forumLogic.GetForums();
+        var result = _forumLogic.AddForum(forum);
+        if (result is null)
+        {
+            return BadRequest();
+        }
+        return Created($"GetForum/{result.Id}", result);
     }
-
 }
