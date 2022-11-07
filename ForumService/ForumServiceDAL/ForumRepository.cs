@@ -10,7 +10,7 @@ public class ForumRepository : IForumRepository
     public ForumRepository(ForumContext context)
     {
         _context = context;
-        // context.Database.Migrate();
+        context.Database.Migrate();
     }
     public Forum GetForum(int id)
     {
