@@ -1,17 +1,20 @@
 ﻿using ForumServiceDAL;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ForumServiceLogic;
 
 public class ForumLogic : IForumLogic
 {
     private readonly IForumRepository _repository;
-    public ForumLogic(IForumRepository repository)
+    private readonly ILogger<IForumLogic> _logger;
+    public ForumLogic(ILogger<IForumLogic> logger, IForumRepository repository)
     {
+        _logger = logger;
         _repository = repository;
     }
-    public Forum GetForum(int id)
+    public Forum? GetForum(int id)
     {
         return _repository.GetForum(id);
     }
@@ -21,18 +24,18 @@ public class ForumLogic : IForumLogic
         return _repository.GetForums();
     }
 
-    public void AddForum(Forum forum)
+    public Forum? AddForum(Forum forum)
     {
-        _repository.AddForum(forum);
+        return _repository.AddForum(forum);
     }
 
-    public void UpdateForum(Forum forum)
+    public Forum? UpdateForum(Forum forum)
     {
-        _repository.UpdateForum(forum);
+        return _repository.UpdateForum(forum);
     }
 
-    public void DeleteForum(int id)
-    {
-        _repository.DeleteForum(id);
+    public bool DeleteForum(int id)
+    { 
+        return _repository.DeleteForum(id);
     }
 }
