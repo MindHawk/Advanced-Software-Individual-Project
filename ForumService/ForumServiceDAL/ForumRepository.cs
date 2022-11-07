@@ -12,7 +12,7 @@ public class ForumRepository : IForumRepository
         _context = context;
         context.Database.Migrate();
     }
-    public Forum GetForum(int id)
+    public Forum? GetForum(int id)
     {
         return _context.Forums.Find(id);
     }
@@ -22,21 +22,29 @@ public class ForumRepository : IForumRepository
         return _context.Forums.ToList();
     }
 
-    public void AddForum(Forum forum)
+    public Forum? AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
         _context.SaveChanges();
+        return GetForum(forum.Id);
     }
 
-    public void UpdateForum(Forum forum)
+    public Forum? UpdateForum(Forum forum)
     {
         _context.Forums.Update(forum);
         _context.SaveChanges();
+        return GetForum(forum.Id);
     }
-
-    public void DeleteForum(int id)
+    
+    public bool DeleteForum(int id)
     {
-        _context.Forums.Remove(GetForum(id));
-        _context.SaveChanges();
+        var forum = GetForum(id);
+        if (forum != null)
+        {
+            _context.Forums.Remove(forum);
+            _context.SaveChanges();
+            return true;
+        }
+        return false;
     }
 }
