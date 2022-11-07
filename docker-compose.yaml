@@ -18,6 +18,8 @@ services:
     container_name: forum_db
     restart: always
     image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
     ports:
       - "8091:5432"
   forum_service:
