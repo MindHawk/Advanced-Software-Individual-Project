@@ -17,7 +17,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
 builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
 builder.Services.AddHostedService<MessageBusListener>().AddLogging();
