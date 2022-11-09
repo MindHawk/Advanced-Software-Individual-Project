@@ -1,8 +1,6 @@
-using ForumServiceAPI.Controllers;
 using ForumServiceLogic;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -22,7 +20,7 @@ public class LogicTest
         _logic = new ForumLogic(mockServiceLogger.Object, _mockRepo.Object);
 
         _defaultForum = new Forum{Id = 1, Name = "Test", Description = "This is a forum for testing"};
-        _mockRepo.Setup(repo => repo.GetForum(1)).Returns(_defaultForum);
+        _mockRepo.Setup(repo => repo.GetForum(_defaultForum.Id)).Returns(_defaultForum);
         // This forum is not in the repository by default
         _secondForum = new Forum{Id = 2, Name = "Test2", Description = "This is another forum for testing"};
     }
@@ -32,6 +30,7 @@ public class LogicTest
     {
         var returnedValue = _logic.GetForum(1);
         
+        Assert.NotNull(returnedValue);
         Assert.Equivalent(_defaultForum, returnedValue);
     }
 
@@ -51,27 +50,30 @@ public class LogicTest
         
         var returnedValue = _logic.GetForums();
         
+        Assert.NotNull(returnedValue);
         Assert.Equivalent(forumList, returnedValue);
     }
     
     [Fact]
     public void GetForums_NoExistingForum_ReturnsEmptyForums()
     {
-        List<Forum> forumList = new List<Forum> {};
+        List<Forum> forumList = new List<Forum>();
         _mockRepo.Setup(repo => repo.GetForums()).Returns(forumList);
         
         var returnedValue = _logic.GetForums();
         
+        Assert.NotNull(returnedValue);
         Assert.Empty(returnedValue);
     }
     
     [Fact]
     public void PostForum_NewForum_ReturnsForum()
     {
-        _mockRepo.Setup(repo => repo.AddForum(_secondForum)).Returns(_secondForum);
+        _mockRepo.Setup(repo => repo.GetForum(_secondForum.Id)).Returns(_secondForum);
         
         var returnedValue = _logic.AddForum(_secondForum);
         
+        Assert.NotNull(returnedValue);
         Assert.Equivalent(_secondForum, returnedValue);
     }
     
@@ -79,6 +81,28 @@ public class LogicTest
     public void PostForum_ExistingForum_ReturnsNull()
     {
         var returnedValue = _logic.AddForum(_defaultForum);
+        
+        Assert.Null(returnedValue);
+    }
+    
+    [Fact]
+    public void PutForum_ExistingForum_ReturnsNewForum()
+    {
+        int existingForumId = _defaultForum.Id;
+        _mockRepo.Setup(repo => repo.GetForum(_secondForum.Id)).Returns(_secondForum);
+        
+        var returnedValue = _logic.UpdateForum(1, _secondForum);
+        
+        Assert.NotNull(returnedValue);
+        Assert.Equivalent(existingForumId, returnedValue.Id);
+        Assert.Equivalent(_secondForum.Description, returnedValue.Description);
+        Assert.Equivalent(_secondForum.Name, returnedValue.Name);
+    }
+    
+    [Fact]
+    public void PutForum_NonExistentForum_ReturnsNull()
+    {
+        var returnedValue = _logic.UpdateForum(2, _secondForum);
         
         Assert.Null(returnedValue);
     }
