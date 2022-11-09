@@ -4,7 +4,8 @@ public interface IForumRepository
 {
     public Forum? GetForum(int id);
     public IEnumerable<Forum> GetForums();
-    public Forum? AddForum(Forum forum);
-    public Forum? UpdateForum(Forum forum);
+    public bool AddForum(Forum forum);
+    public bool UpdateForum(int id, Forum forum);
     public bool DeleteForum(int id);
+    public bool ForumExists(int id);
 }
