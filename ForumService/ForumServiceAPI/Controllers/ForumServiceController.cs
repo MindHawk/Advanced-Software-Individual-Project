@@ -35,6 +35,7 @@ public class ForumServiceController : ControllerBase
         var forum = _forumLogic.GetForum(id);
         if (forum is null)
         {
+            _logger.Log(LogLevel.Information, "Forum with id {id} not found", id);
             return NotFound();
         }
         return Ok(forum);
@@ -42,13 +43,45 @@ public class ForumServiceController : ControllerBase
     
     [HttpPost(Name = "PostForum")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Forum))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult PostForum(Forum forum)
     {
         var result = _forumLogic.AddForum(forum);
         if (result is null)
         {
+            _logger.Log(LogLevel.Information, "Forum with id {id} attempted to be created, but already exists", forum.Id);
             return BadRequest();
         }
         return Created($"GetForum/{result.Id}", result);
+    }
+
+    [HttpPut(Name = "PutForum")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Route("{id:int}")]
+    public IActionResult PutForum(int id, Forum forum)
+    {
+        var result = _forumLogic.UpdateForum(id, forum);
+        if (result is null)
+        {
+            _logger.Log(LogLevel.Information, "Forum with id {id} attempted to be updated, but does not exist", forum.Id);
+            return NotFound();
+        }
+        return Ok(result);
+    }
+    
+    [HttpDelete(Name = "DeleteForum")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Route("{id:int}")]
+    public IActionResult DeleteForum(int id)
+    {
+        var result = _forumLogic.DeleteForum(id);
+        if (result is false)
+        {
+            _logger.Log(LogLevel.Information, "Forum with id {id} attempted to be deleted, but does not exist", id);
+            return NotFound();
+        }
+        return Ok();
     }
 }
