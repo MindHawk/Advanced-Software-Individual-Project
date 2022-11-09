@@ -16,26 +16,40 @@ public class ForumLogic : IForumLogic
     }
     public Forum? GetForum(int id)
     {
+        _logger.Log(LogLevel.Information, "Getting forum with id {id}", id);
         return _repository.GetForum(id);
     }
 
     public IEnumerable<Forum> GetForums()
     {
+        _logger.Log(LogLevel.Information, "Getting all forums");
         return _repository.GetForums();
     }
 
     public Forum? AddForum(Forum forum)
     {
-        return _repository.AddForum(forum);
+        if (_repository.ForumExists(forum.Id))
+        {
+            _logger.Log(LogLevel.Information, "Forum with id {id} already exists", forum.Id);
+            return null;
+        }
+        _logger.Log(LogLevel.Information, "Adding forum {forum}", forum);
+        if (_repository.AddForum(forum))
+        {
+            return _repository.GetForum(forum.Id);
+        }
+        return null;
     }
 
-    public Forum? UpdateForum(Forum forum)
+    public Forum? UpdateForum(int id, Forum forum)
     {
-        return _repository.UpdateForum(forum);
+        _logger.Log(LogLevel.Information, "Updating forum {forum}", forum);
+        return _repository.UpdateForum(id, forum) ? _repository.GetForum(id) : null;
     }
 
     public bool DeleteForum(int id)
     { 
+        _logger.Log(LogLevel.Information, "Deleting forum with id {id}", id);
         return _repository.DeleteForum(id);
     }
 }
