@@ -1,6 +1,7 @@
 ﻿using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ForumServiceDAL;
 
@@ -22,29 +23,29 @@ public class ForumRepository : IForumRepository
         return _context.Forums.ToList();
     }
 
-    public Forum? AddForum(Forum forum)
+    public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
-        _context.SaveChanges();
-        return GetForum(forum.Id);
+        return _context.SaveChanges() > 0;
     }
 
-    public Forum? UpdateForum(Forum forum)
+    public bool UpdateForum(int id, Forum forum)
     {
+        forum.Id = id;
         _context.Forums.Update(forum);
-        _context.SaveChanges();
-        return GetForum(forum.Id);
+        return _context.SaveChanges() > 0;
     }
     
     public bool DeleteForum(int id)
     {
-        var forum = GetForum(id);
-        if (forum != null)
-        {
-            _context.Forums.Remove(forum);
-            _context.SaveChanges();
-            return true;
-        }
-        return false;
+        Forum? forum = GetForum(id);
+        if (forum == null) return false;
+        _context.Forums.Remove(forum);
+        return _context.SaveChanges() > 0;
+    }
+    
+    public bool ForumExists(int id)
+    {
+        return _context.Forums.Any(e => e.Id == id);
     }
 }
