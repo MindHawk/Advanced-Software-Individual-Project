@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString");
 builder.Services.AddDbContext<ForumContext>(options => options.UseNpgsql(
     connectionString, 
-    x => x.MigrationsAssembly("ForumService")));
+    x => x.MigrationsAssembly("ForumServiceAPI")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
