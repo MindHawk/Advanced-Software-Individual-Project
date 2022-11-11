@@ -17,7 +17,7 @@ public class ForumServiceController : ControllerBase
         _forumLogic = forumLogic;
     }
 
-    [HttpGet(Name = "GetForums")]
+    [HttpGet("GetForums")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Forum>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetForums()
@@ -26,10 +26,9 @@ public class ForumServiceController : ControllerBase
         return Ok(forums);
     }
 
-    [HttpGet(Name = "GetForum")]
+    [HttpGet("GetForum/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Route("{id:int}")]
     public IActionResult GetForum(int id)
     {
         var forum = _forumLogic.GetForum(id);
@@ -41,7 +40,7 @@ public class ForumServiceController : ControllerBase
         return Ok(forum);
     }
     
-    [HttpPost(Name = "PostForum")]
+    [HttpPost("PostForum")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult PostForum(Forum forum)
@@ -55,10 +54,9 @@ public class ForumServiceController : ControllerBase
         return Created($"GetForum/{result.Id}", result);
     }
 
-    [HttpPut(Name = "PutForum")]
+    [HttpPut("PutForum/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Route("{id:int}")]
     public IActionResult PutForum(int id, Forum forum)
     {
         var result = _forumLogic.UpdateForum(id, forum);
@@ -70,10 +68,9 @@ public class ForumServiceController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete(Name = "DeleteForum")]
+    [HttpDelete("DeleteForum")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Route("{id:int}")]
     public IActionResult DeleteForum(int id)
     {
         var result = _forumLogic.DeleteForum(id);
