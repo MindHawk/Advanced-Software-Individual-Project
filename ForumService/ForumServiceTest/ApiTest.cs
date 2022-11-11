@@ -1,5 +1,4 @@
 using ForumServiceAPI.Controllers;
-using ForumServiceLogic;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -21,25 +20,25 @@ public class ApiTest
         _mockLogic = new Mock<IForumLogic>();
         _controller = new ForumServiceController(mockServiceLogger.Object, _mockLogic.Object);
 
-        _defaultForum = new Forum { Id = 1, Name = "Test", Description = "This is a forum for testing" };
-        _mockLogic.Setup(repo => repo.GetForum(1)).Returns(_defaultForum);
+        _defaultForum = new Forum { Name = "Test", Description = "This is a forum for testing" };
+        _mockLogic.Setup(repo => repo.GetForum(_defaultForum.Name)).Returns(_defaultForum);
         // This forum is not in the repository by default
-        _secondForum = new Forum { Id = 2, Name = "Test2", Description = "This is another forum for testing" };
+        _secondForum = new Forum { Name = "Test2", Description = "This is another forum for testing" };
     }
 
     [Fact]
     public void GetForum_ExistingForum_ReturnsOkObjectAndForum()
     {
-        OkObjectResult? returnedValue = _controller.GetForum(1) as OkObjectResult;
+        OkObjectResult? returnedValue = _controller.GetForum(_defaultForum.Name) as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(returnedValue);
-        Assert.Equivalent(_defaultForum, returnedValue?.Value);
+        Assert.Equivalent(_defaultForum, returnedValue.Value);
     }
 
     [Fact]
     public void GetForum_NonExistentForum_ReturnsNotFound()
     {
-        NotFoundResult? returnedValue = _controller.GetForum(2) as NotFoundResult;
+        NotFoundResult? returnedValue = _controller.GetForum(_secondForum.Name) as NotFoundResult;
 
         Assert.IsType<NotFoundResult>(returnedValue);
     }
@@ -77,7 +76,7 @@ public class ApiTest
 
         Assert.IsType<CreatedResult>(returnedValue);
         Assert.Equal("GetForum/2", returnedValue.Location);
-        Assert.Equivalent(_secondForum, returnedValue?.Value);
+        Assert.Equivalent(_secondForum, returnedValue.Value);
     }
 
     [Fact]
@@ -91,7 +90,7 @@ public class ApiTest
     [Fact]
     public void PutForum_NewForum_ReturnsNotFound()
     {
-        NotFoundResult? returnedValue = _controller.PutForum(2, _secondForum) as NotFoundResult;
+        NotFoundResult? returnedValue = _controller.PutForum(_secondForum) as NotFoundResult;
 
         Assert.IsType<NotFoundResult>(returnedValue);
     }
@@ -99,20 +98,20 @@ public class ApiTest
     [Fact]
     public void PutForum_ExistingForum_ReturnsOkObjectAndForum()
     {
-        _mockLogic.Setup(repo => repo.UpdateForum(1, _defaultForum)).Returns(_defaultForum);
+        _mockLogic.Setup(repo => repo.UpdateForum(_defaultForum)).Returns(_defaultForum);
 
-        OkObjectResult? returnedValue = _controller.PutForum(1, _defaultForum) as OkObjectResult;
+        OkObjectResult? returnedValue = _controller.PutForum(_defaultForum) as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(returnedValue);
-        Assert.Equivalent(_defaultForum, returnedValue?.Value);
+        Assert.Equivalent(_defaultForum, returnedValue.Value);
     }
 
     [Fact]
     public void DeleteForum_ExistingForum_ReturnsOk()
     {
-        _mockLogic.Setup(repo => repo.DeleteForum(1)).Returns(true);
+        _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(true);
 
-        OkResult? returnedValue = _controller.DeleteForum(1) as OkResult;
+        OkResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as OkResult;
 
         Assert.IsType<OkResult>(returnedValue);
     }
@@ -120,9 +119,9 @@ public class ApiTest
     [Fact]
     public void DeleteForum_NonExistentForum_ReturnsNotFound()
     {
-        _mockLogic.Setup(repo => repo.DeleteForum(2)).Returns(false);
+        _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(false);
 
-        NotFoundResult? returnedValue = _controller.DeleteForum(2) as NotFoundResult;
+        NotFoundResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as NotFoundResult;
 
         Assert.IsType<NotFoundResult>(returnedValue);
     }

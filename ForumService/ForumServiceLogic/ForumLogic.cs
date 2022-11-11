@@ -14,10 +14,10 @@ public class ForumLogic : IForumLogic
         _logger = logger;
         _repository = repository;
     }
-    public Forum? GetForum(int id)
+    public Forum? GetForum(string name)
     {
-        _logger.Log(LogLevel.Information, "Getting forum with id {id}", id);
-        return _repository.GetForum(id);
+        _logger.Log(LogLevel.Information, "Getting forum with name {id}", name);
+        return _repository.GetForum(name);
     }
 
     public IEnumerable<Forum> GetForums()
@@ -28,28 +28,28 @@ public class ForumLogic : IForumLogic
 
     public Forum? AddForum(Forum forum)
     {
-        if (_repository.ForumExists(forum.Id))
+        if (_repository.ForumExists(forum.Name))
         {
-            _logger.Log(LogLevel.Information, "Forum with id {id} already exists", forum.Id);
+            _logger.Log(LogLevel.Information, "Forum with name {name} already exists", forum.Name);
             return null;
         }
         _logger.Log(LogLevel.Information, "Adding forum {forum}", forum);
         if (_repository.AddForum(forum))
         {
-            return _repository.GetForum(forum.Id);
+            return _repository.GetForum(forum.Name);
         }
         return null;
     }
 
-    public Forum? UpdateForum(int id, Forum forum)
+    public Forum? UpdateForum(Forum forum)
     {
         _logger.Log(LogLevel.Information, "Updating forum {forum}", forum);
-        return _repository.UpdateForum(id, forum) ? _repository.GetForum(id) : null;
+        return _repository.UpdateForum(forum) ? _repository.GetForum(forum.Name) : null;
     }
 
-    public bool DeleteForum(int id)
+    public bool DeleteForum(string name)
     { 
-        _logger.Log(LogLevel.Information, "Deleting forum with id {id}", id);
-        return _repository.DeleteForum(id);
+        _logger.Log(LogLevel.Information, "Deleting forum with name {name}", name);
+        return _repository.DeleteForum(name);
     }
 }

@@ -11,11 +11,11 @@ public class ForumRepository : IForumRepository
     public ForumRepository(ForumContext context)
     {
         _context = context;
-        context.Database.Migrate();
+        _context.Database.Migrate();
     }
-    public Forum? GetForum(int id)
+    public Forum? GetForum(string name)
     {
-        return _context.Forums.Find(id);
+        return _context.Forums.Find(name);
     }
 
     public IEnumerable<Forum> GetForums()
@@ -29,23 +29,22 @@ public class ForumRepository : IForumRepository
         return _context.SaveChanges() > 0;
     }
 
-    public bool UpdateForum(int id, Forum forum)
+    public bool UpdateForum(Forum forum)
     {
-        forum.Id = id;
         _context.Forums.Update(forum);
         return _context.SaveChanges() > 0;
     }
     
-    public bool DeleteForum(int id)
+    public bool DeleteForum(string name)
     {
-        Forum? forum = GetForum(id);
+        Forum? forum = GetForum(name);
         if (forum == null) return false;
         _context.Forums.Remove(forum);
         return _context.SaveChanges() > 0;
     }
     
-    public bool ForumExists(int id)
+    public bool ForumExists(string name)
     {
-        return _context.Forums.Any(e => e.Id == id);
+        return _context.Forums.Any(e => e.Name == name);
     }
 }
