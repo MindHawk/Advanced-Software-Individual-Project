@@ -125,22 +125,7 @@ public class ApiTest
 
         Assert.IsType<NotFoundResult>(returnedValue);
     }
-
-    [Theory]
-    [InlineData(2, 0)]
-    [InlineData(3, 301)]
-    [InlineData(61, 0)]
-    [InlineData(61, 301)]
-    public void PostForum_ForumInvalidStringLengths_ReturnsBadRequest(int nameStringLength, int descriptionStringLength)
-    {
-        _secondForum.Name = new string('a', nameStringLength);
-        _secondForum.Description = new string('a', descriptionStringLength);
-        _mockLogic.Setup(repo => repo.AddForum(_secondForum)).Returns(_secondForum);
-
-        BadRequestResult? returnedValue = _controller.PostForum(_secondForum) as BadRequestResult;
-
-        Assert.IsType<BadRequestResult>(returnedValue);
-    }
+    
     [Theory]
     [InlineData(3, 0)]
     [InlineData(60, 0)]

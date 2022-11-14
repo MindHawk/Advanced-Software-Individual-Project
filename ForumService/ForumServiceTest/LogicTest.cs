@@ -69,6 +69,7 @@ public class LogicTest
     [Fact]
     public void PostForum_NewForum_ReturnsForum()
     {
+        _mockRepo.Setup(repo => repo.AddForum(_secondForum)).Returns(true);
         _mockRepo.Setup(repo => repo.GetForum(_secondForum.Name)).Returns(_secondForum);
         
         var returnedValue = _logic.AddForum(_secondForum);
@@ -89,6 +90,8 @@ public class LogicTest
     public void PutForum_ExistingForum_ReturnsNewForum()
     {
         string existingForumName = _defaultForum.Name;
+        _secondForum.Name = existingForumName;
+        _mockRepo.Setup(repo => repo.UpdateForum(_secondForum)).Returns(true);
         _mockRepo.Setup(repo => repo.GetForum(_secondForum.Name)).Returns(_secondForum);
         
         var returnedValue = _logic.UpdateForum(_secondForum);
