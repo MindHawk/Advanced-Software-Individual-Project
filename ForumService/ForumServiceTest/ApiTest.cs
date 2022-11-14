@@ -75,7 +75,7 @@ public class ApiTest
         CreatedResult? returnedValue = _controller.PostForum(_secondForum) as CreatedResult;
 
         Assert.IsType<CreatedResult>(returnedValue);
-        Assert.Equal("GetForum/2", returnedValue.Location);
+        Assert.Equal($"GetForum/{_secondForum.Name}", returnedValue.Location);
         Assert.Equivalent(_secondForum, returnedValue.Value);
     }
 
