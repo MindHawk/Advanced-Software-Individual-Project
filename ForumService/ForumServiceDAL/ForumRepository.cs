@@ -1,6 +1,7 @@
 ﻿using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ForumServiceDAL;
 
@@ -10,11 +11,11 @@ public class ForumRepository : IForumRepository
     public ForumRepository(ForumContext context)
     {
         _context = context;
-        // context.Database.Migrate();
+        _context.Database.Migrate();
     }
-    public Forum GetForum(int id)
+    public Forum? GetForum(string name)
     {
-        return _context.Forums.Find(id);
+        return _context.Forums.Find(name);
     }
 
     public IEnumerable<Forum> GetForums()
@@ -22,21 +23,28 @@ public class ForumRepository : IForumRepository
         return _context.Forums.ToList();
     }
 
-    public void AddForum(Forum forum)
+    public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
-        _context.SaveChanges();
+        return _context.SaveChanges() > 0;
     }
 
-    public void UpdateForum(Forum forum)
+    public bool UpdateForum(Forum forum)
     {
         _context.Forums.Update(forum);
-        _context.SaveChanges();
+        return _context.SaveChanges() > 0;
     }
-
-    public void DeleteForum(int id)
+    
+    public bool DeleteForum(string name)
     {
-        _context.Forums.Remove(GetForum(id));
-        _context.SaveChanges();
+        Forum? forum = GetForum(name);
+        if (forum == null) return false;
+        _context.Forums.Remove(forum);
+        return _context.SaveChanges() > 0;
+    }
+    
+    public bool ForumExists(string name)
+    {
+        return _context.Forums.Any(e => e.Name == name);
     }
 }

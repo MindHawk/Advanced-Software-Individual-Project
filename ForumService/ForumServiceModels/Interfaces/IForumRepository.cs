@@ -2,9 +2,10 @@ namespace ForumServiceModels.Interfaces;
 
 public interface IForumRepository
 {
-    public Forum GetForum(int id);
+    public Forum? GetForum(string name);
     public IEnumerable<Forum> GetForums();
-    public void AddForum(Forum forum);
-    public void UpdateForum(Forum forum);
-    public void DeleteForum(int id);
+    public bool AddForum(Forum forum);
+    public bool UpdateForum(Forum forum);
+    public bool DeleteForum(string name);
+    public bool ForumExists(string name);
 }
