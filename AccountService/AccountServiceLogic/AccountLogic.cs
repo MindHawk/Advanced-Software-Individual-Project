@@ -1,15 +1,15 @@
 ﻿using ForumServiceDAL;
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace ForumServiceLogic;
 
-public class ForumLogic : IForumLogic
+public class AccountLogic : IAccountLogic
 {
-    private readonly IForumRepository _repository;
-    private readonly ILogger<IForumLogic> _logger;
-    public ForumLogic(ILogger<IForumLogic> logger, IForumRepository repository)
+    private readonly IAccountRepository _repository;
+    private readonly ILogger<IAccountLogic> _logger;
+    public AccountLogic(ILogger<IAccountLogic> logger, IAccountRepository repository)
     {
         _logger = logger;
         _repository = repository;

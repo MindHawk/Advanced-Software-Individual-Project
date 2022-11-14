@@ -1,4 +1,4 @@
-namespace ForumServiceModels.Interfaces;
+namespace AccountServiceModels.Interfaces;
 
 public interface IForumLogic
 {

@@ -1,4 +1,4 @@
-using AccountServiceModels;
+using ForumServiceModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ForumServiceDAL;

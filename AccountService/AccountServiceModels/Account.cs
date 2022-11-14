@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AccountServiceModels;
 
-public class Forum
+public class Account
 {
     // Forum names may never be shared with other forums; they are a unique identifier.
     [Key, Required, StringLength(60, MinimumLength = 3)]

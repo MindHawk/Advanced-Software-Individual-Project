@@ -1,17 +1,17 @@
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumServiceAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ForumServiceController : ControllerBase
+public class AccountServiceController : ControllerBase
 {
-    private readonly ILogger<ForumServiceController> _logger;
+    private readonly ILogger<AccountServiceController> _logger;
     private readonly IForumLogic _forumLogic;
 
-    public ForumServiceController(ILogger<ForumServiceController> logger, IForumLogic forumLogic)
+    public AccountServiceController(ILogger<AccountServiceController> logger, IForumLogic forumLogic)
     {
         _logger = logger;
         _forumLogic = forumLogic;
