@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
-builder.Services.AddHostedService<MessageBusListener>().AddLogging();
+builder.Services.AddHostedService<MessageBusListener>();
 
 var app = builder.Build();
 
