@@ -1,38 +1,55 @@
 ﻿using ForumServiceDAL;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ForumServiceLogic;
 
 public class ForumLogic : IForumLogic
 {
     private readonly IForumRepository _repository;
-    public ForumLogic(IForumRepository repository)
+    private readonly ILogger<IForumLogic> _logger;
+    public ForumLogic(ILogger<IForumLogic> logger, IForumRepository repository)
     {
+        _logger = logger;
         _repository = repository;
     }
-    public Forum GetForum(int id)
+    public Forum? GetForum(string name)
     {
-        return _repository.GetForum(id);
+        _logger.Log(LogLevel.Information, "Getting forum with name {id}", name);
+        return _repository.GetForum(name);
     }
 
     public IEnumerable<Forum> GetForums()
     {
+        _logger.Log(LogLevel.Information, "Getting all forums");
         return _repository.GetForums();
     }
 
-    public void AddForum(Forum forum)
+    public Forum? AddForum(Forum forum)
     {
-        _repository.AddForum(forum);
+        if (_repository.ForumExists(forum.Name))
+        {
+            _logger.Log(LogLevel.Information, "Forum with name {name} already exists", forum.Name);
+            return null;
+        }
+        _logger.Log(LogLevel.Information, "Adding forum {forum}", forum);
+        if (_repository.AddForum(forum))
+        {
+            return _repository.GetForum(forum.Name);
+        }
+        return null;
     }
 
-    public void UpdateForum(Forum forum)
+    public Forum? UpdateForum(Forum forum)
     {
-        _repository.UpdateForum(forum);
+        _logger.Log(LogLevel.Information, "Updating forum {forum}", forum);
+        return _repository.UpdateForum(forum) ? _repository.GetForum(forum.Name) : null;
     }
 
-    public void DeleteForum(int id)
-    {
-        _repository.DeleteForum(id);
+    public bool DeleteForum(string name)
+    { 
+        _logger.Log(LogLevel.Information, "Deleting forum with name {name}", name);
+        return _repository.DeleteForum(name);
     }
 }
