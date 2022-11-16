@@ -33,6 +33,25 @@ services:
     depends_on:
       - rabbitmq
       - forum_db
+  account_db:
+    container_name: account_db
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "8092:5432"
+  account_service:
+    container_name: account_service
+    restart: always
+    build:
+      context: "./AccountService"
+      dockerfile: "AccountServiceAPI/Dockerfile"
+    ports:
+      - "8093:80"
+    depends_on:
+      - rabbitmq
+      - account_db
   producer:
     container_name: producer
     restart: always
