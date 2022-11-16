@@ -26,25 +26,25 @@ public class AccountLogic : IAccountLogic
         return _repository.GetAccounts();
     }
 
-    public Account? AddAccount(Account Account)
+    public Account? AddAccount(Account account)
     {
-        if (_repository.AccountExists(Account.Name))
+        if (_repository.AccountExists(account.Name))
         {
-            _logger.Log(LogLevel.Information, "Account with name {name} already exists", Account.Name);
+            _logger.Log(LogLevel.Information, "Account with name {name} already exists", account.Name);
             return null;
         }
-        _logger.Log(LogLevel.Information, "Adding Account {Account}", Account);
-        if (_repository.AddAccount(Account))
+        _logger.Log(LogLevel.Information, "Adding Account {Account}", account);
+        if (_repository.AddAccount(account))
         {
-            return _repository.GetAccount(Account.Name);
+            return _repository.GetAccount(account.Name);
         }
         return null;
     }
 
-    public Account? UpdateAccount(Account Account)
+    public Account? UpdateAccount(Account account)
     {
-        _logger.Log(LogLevel.Information, "Updating Account {Account}", Account);
-        return _repository.UpdateAccount(Account) ? _repository.GetAccount(Account.Name) : null;
+        _logger.Log(LogLevel.Information, "Updating Account {Account}", account);
+        return _repository.UpdateAccount(account) ? _repository.GetAccount(account.Name) : null;
     }
 
     public bool DeleteAccount(string name)
