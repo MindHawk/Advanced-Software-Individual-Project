@@ -1,13 +1,13 @@
-using ForumServiceModels;
+using AccountServiceModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace ForumServiceDAL;
+namespace AccountServiceDAL;
 
-public class ForumContext : DbContext
+public class AccountContext : DbContext
 {
-    public ForumContext(DbContextOptions<ForumContext> options) : base(options)
+    public AccountContext(DbContextOptions<AccountContext> options) : base(options)
     {
     }
 
-    public DbSet<Forum> Forums { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 }

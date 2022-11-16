@@ -1,9 +1,9 @@
-﻿using ForumServiceDAL;
-using ForumServiceModels;
-using ForumServiceModels.Interfaces;
+﻿using AccountServiceDAL;
+using AccountServiceModels;
+using AccountServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace ForumServiceLogic;
+namespace AccountServiceLogic;
 
 public class AccountLogic : IAccountLogic
 {
@@ -14,42 +14,42 @@ public class AccountLogic : IAccountLogic
         _logger = logger;
         _repository = repository;
     }
-    public Forum? GetForum(string name)
+    public Account? GetAccount(string name)
     {
-        _logger.Log(LogLevel.Information, "Getting forum with name {id}", name);
-        return _repository.GetForum(name);
+        _logger.Log(LogLevel.Information, "Getting Account with name {id}", name);
+        return _repository.GetAccount(name);
     }
 
-    public IEnumerable<Forum> GetForums()
+    public IEnumerable<Account> GetAccounts()
     {
-        _logger.Log(LogLevel.Information, "Getting all forums");
-        return _repository.GetForums();
+        _logger.Log(LogLevel.Information, "Getting all Accounts");
+        return _repository.GetAccounts();
     }
 
-    public Forum? AddForum(Forum forum)
+    public Account? AddAccount(Account Account)
     {
-        if (_repository.ForumExists(forum.Name))
+        if (_repository.AccountExists(Account.Name))
         {
-            _logger.Log(LogLevel.Information, "Forum with name {name} already exists", forum.Name);
+            _logger.Log(LogLevel.Information, "Account with name {name} already exists", Account.Name);
             return null;
         }
-        _logger.Log(LogLevel.Information, "Adding forum {forum}", forum);
-        if (_repository.AddForum(forum))
+        _logger.Log(LogLevel.Information, "Adding Account {Account}", Account);
+        if (_repository.AddAccount(Account))
         {
-            return _repository.GetForum(forum.Name);
+            return _repository.GetAccount(Account.Name);
         }
         return null;
     }
 
-    public Forum? UpdateForum(Forum forum)
+    public Account? UpdateAccount(Account Account)
     {
-        _logger.Log(LogLevel.Information, "Updating forum {forum}", forum);
-        return _repository.UpdateForum(forum) ? _repository.GetForum(forum.Name) : null;
+        _logger.Log(LogLevel.Information, "Updating Account {Account}", Account);
+        return _repository.UpdateAccount(Account) ? _repository.GetAccount(Account.Name) : null;
     }
 
-    public bool DeleteForum(string name)
+    public bool DeleteAccount(string name)
     { 
-        _logger.Log(LogLevel.Information, "Deleting forum with name {name}", name);
-        return _repository.DeleteForum(name);
+        _logger.Log(LogLevel.Information, "Deleting Account with name {name}", name);
+        return _repository.DeleteAccount(name);
     }
 }

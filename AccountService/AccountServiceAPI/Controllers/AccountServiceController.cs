@@ -1,82 +1,82 @@
-using ForumServiceModels;
-using ForumServiceModels.Interfaces;
+using AccountServiceModels.Interfaces;
+using AccountServiceModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ForumServiceAPI.Controllers;
+namespace AccountServiceAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class AccountServiceController : ControllerBase
 {
     private readonly ILogger<AccountServiceController> _logger;
-    private readonly IForumLogic _forumLogic;
+    private readonly IAccountLogic _accountLogic;
 
-    public AccountServiceController(ILogger<AccountServiceController> logger, IForumLogic forumLogic)
+    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic AccountLogic)
     {
         _logger = logger;
-        _forumLogic = forumLogic;
+        _accountLogic = AccountLogic;
     }
 
-    [HttpGet("GetForums")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Forum>) )]
+    [HttpGet("GetAccounts")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Account>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetForums()
+    public IActionResult GetAccounts()
     {
-        var forums = _forumLogic.GetForums();
-        return Ok(forums);
+        var accounts = _accountLogic.GetAccounts();
+        return Ok(accounts);
     }
 
-    [HttpGet("GetForum/{name}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
+    [HttpGet("GetAccount/{name}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetForum(string name)
+    public IActionResult GetAccount(string name)
     {
-        var forum = _forumLogic.GetForum(name);
-        if (forum is null)
+        var account = _accountLogic.GetAccount(name);
+        if (account is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with name {name} not found", name);
+            _logger.Log(LogLevel.Information, "Account with name {name} not found", name);
             return NotFound();
         }
-        return Ok(forum);
+        return Ok(account);
     }
     
-    [HttpPost("PostForum")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Forum))]
+    [HttpPost("PostAccount")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult PostForum(Forum forum)
+    public IActionResult PostAccount(Account Account)
     {
-        var result = _forumLogic.AddForum(forum);
+        var result = _accountLogic.AddAccount(Account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with id {name} attempted to be created, but already exists", forum.Name);
+            _logger.Log(LogLevel.Information, "Account with id {name} attempted to be created, but already exists", Account.Name);
             return BadRequest();
         }
-        return Created($"GetForum/{result.Name}", result);
+        return Created($"GetAccount/{result.Name}", result);
     }
 
-    [HttpPut("PutForum")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
+    [HttpPut("PutAccount")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult PutForum(Forum forum)
+    public IActionResult PutAccount(Account Account)
     {
-        var result = _forumLogic.UpdateForum(forum);
+        var result = _accountLogic.UpdateAccount(Account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with id {name} attempted to be updated, but does not exist", forum.Name);
+            _logger.Log(LogLevel.Information, "Account with id {name} attempted to be updated, but does not exist", Account.Name);
             return NotFound();
         }
         return Ok(result);
     }
     
-    [HttpDelete("DeleteForum/{name}")]
+    [HttpDelete("DeleteAccount/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteForum(string name)
+    public IActionResult DeleteAccount(string name)
     {
-        var result = _forumLogic.DeleteForum(name);
+        var result = _accountLogic.DeleteAccount(name);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Forum with name {name} attempted to be deleted, but does not exist", name);
+            _logger.Log(LogLevel.Information, "Account with name {name} attempted to be deleted, but does not exist", name);
             return NotFound();
         }
         return Ok();

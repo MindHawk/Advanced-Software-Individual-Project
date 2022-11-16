@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ForumServiceDAL\ForumServiceDAL.csproj"/>
-        <ProjectReference Include="..\ForumServiceModels\ForumServiceModels.csproj"/>
+        <ProjectReference Include="..\AccountServiceDAL\AccountServiceDAL.csproj"/>
+        <ProjectReference Include="..\AccountServiceModels\AccountServiceModels.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

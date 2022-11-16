@@ -23,11 +23,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ForumServiceAPI\ForumServiceAPI.csproj" />
-        <ProjectReference Include="..\ForumServiceDAL\ForumServiceDAL.csproj" />
-        <ProjectReference Include="..\ForumServiceLogic\ForumServiceLogic.csproj" />
-        <ProjectReference Include="..\ForumServiceMessageBus\ForumServiceMessageBus.csproj" />
-        <ProjectReference Include="..\ForumServiceModels\ForumServiceModels.csproj" />
+        <ProjectReference Include="..\AccountServiceAPI\AccountServiceAPI.csproj" />
+        <ProjectReference Include="..\AccountServiceDAL\AccountServiceDAL.csproj" />
+        <ProjectReference Include="..\AccountServiceLogic\AccountServiceLogic.csproj" />
+        <ProjectReference Include="..\AccountServiceMessageBus\AccountServiceMessageBus.csproj" />
+        <ProjectReference Include="..\AccountServiceModels\AccountServiceModels.csproj" />
     </ItemGroup>
 
 </Project>
