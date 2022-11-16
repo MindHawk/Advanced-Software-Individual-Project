@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "ForumServiceAPI": {
+    "AccountServiceAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
