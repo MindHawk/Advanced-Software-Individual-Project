@@ -29,7 +29,7 @@ public class AccountServiceController : ControllerBase
     [HttpGet("GetAccount/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAccount(Guid id)
+    public IActionResult GetAccount(int id)
     {
         var account = _accountLogic.GetAccount(id);
         if (account is null)
@@ -71,7 +71,7 @@ public class AccountServiceController : ControllerBase
     [HttpDelete("DeleteAccount/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteAccount(Guid id)
+    public IActionResult DeleteAccount(int id)
     {
         var result = _accountLogic.DeleteAccount(id);
         if (result is false)

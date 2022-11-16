@@ -14,7 +14,7 @@ public class AccountLogic : IAccountLogic
         _logger = logger;
         _repository = repository;
     }
-    public Account? GetAccount(Guid id)
+    public Account? GetAccount(int id)
     {
         _logger.Log(LogLevel.Information, "Getting Account with id {id}", id);
         return _repository.GetAccount(id);
@@ -47,7 +47,7 @@ public class AccountLogic : IAccountLogic
         return _repository.UpdateAccount(account) ? _repository.GetAccount(account.Id) : null;
     }
 
-    public bool DeleteAccount(Guid id)
+    public bool DeleteAccount(int id)
     {
         _logger.Log(LogLevel.Information, "Deleting Account with id {id}", id);
         return _repository.DeleteAccount(id);

@@ -13,7 +13,7 @@ public class AccountRepository : IAccountRepository
         _context = context;
         _context.Database.Migrate();
     }
-    public Account? GetAccount(Guid id)
+    public Account? GetAccount(int id)
     {
         return _context.Accounts.Find(id);
     }
@@ -25,7 +25,6 @@ public class AccountRepository : IAccountRepository
 
     public bool AddAccount(Account account)
     {
-        account.Id = Guid.NewGuid();
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
     }
@@ -36,7 +35,7 @@ public class AccountRepository : IAccountRepository
         return _context.SaveChanges() > 0;
     }
     
-    public bool DeleteAccount(Guid id)
+    public bool DeleteAccount(int id)
     {
         Account? account = GetAccount(id);
         if (account == null) return false;
