@@ -7,20 +7,20 @@ ENV Logging__Console__FormatterName=simple
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ForumServiceAPI/ForumServiceAPI.csproj", "ForumServiceAPI/"]
-COPY ["ForumServiceDAL/ForumServiceDAL.csproj", "ForumServiceDAL/"]
-COPY ["ForumServiceLogic/ForumServiceLogic.csproj", "ForumServiceLogic/"]
-COPY ["ForumServiceModels/ForumServiceModels.csproj", "ForumServiceModels/"]
-COPY ["ForumServiceMessageBus/ForumServiceMessageBus.csproj", "ForumServiceMessageBus/"]
-RUN dotnet restore "ForumServiceAPI/ForumServiceAPI.csproj"
+COPY ["AccountServiceAPI/AccountServiceAPI.csproj", "AccountServiceAPI/"]
+COPY ["AccountServiceDAL/AccountServiceDAL.csproj", "AccountServiceDAL/"]
+COPY ["AccountServiceLogic/AccountServiceLogic.csproj", "AccountServiceLogic/"]
+COPY ["AccountServiceModels/AccountServiceModels.csproj", "AccountServiceModels/"]
+COPY ["AccountServiceMessageBus/AccountServiceMessageBus.csproj", "AccountServiceMessageBus/"]
+RUN dotnet restore "AccountServiceAPI/AccountServiceAPI.csproj"
 COPY . .
-WORKDIR "/src/ForumServiceAPI"
-RUN dotnet build "ForumServiceAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/AccountServiceAPI"
+RUN dotnet build "AccountServiceAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ForumServiceAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "AccountServiceAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ForumServiceAPI.dll"]
+ENTRYPOINT ["dotnet", "AccountServiceAPI.dll"]
