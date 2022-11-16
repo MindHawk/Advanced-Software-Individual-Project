@@ -13,9 +13,9 @@ public class AccountRepository : IAccountRepository
         _context = context;
         _context.Database.Migrate();
     }
-    public Account? GetAccount(string name)
+    public Account? GetAccount(Guid id)
     {
-        return _context.Accounts.Find(name);
+        return _context.Accounts.Find(id);
     }
 
     public IEnumerable<Account> GetAccounts()
@@ -25,6 +25,7 @@ public class AccountRepository : IAccountRepository
 
     public bool AddAccount(Account account)
     {
+        account.id = Guid.NewGuid();
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
     }
@@ -35,11 +36,11 @@ public class AccountRepository : IAccountRepository
         return _context.SaveChanges() > 0;
     }
     
-    public bool DeleteAccount(string name)
+    public bool DeleteAccount(Guid id)
     {
-        Account? Account = GetAccount(name);
-        if (Account == null) return false;
-        _context.Accounts.Remove(Account);
+        Account? account = GetAccount(id);
+        if (account == null) return false;
+        _context.Accounts.Remove(account);
         return _context.SaveChanges() > 0;
     }
     

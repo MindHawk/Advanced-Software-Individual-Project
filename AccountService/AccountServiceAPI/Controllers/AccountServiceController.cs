@@ -29,12 +29,12 @@ public class AccountServiceController : ControllerBase
     [HttpGet("GetAccount/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAccount(string name)
+    public IActionResult GetAccount(Guid id)
     {
-        var account = _accountLogic.GetAccount(name);
+        var account = _accountLogic.GetAccount(id);
         if (account is null)
         {
-            _logger.Log(LogLevel.Information, "Account with name {name} not found", name);
+            _logger.Log(LogLevel.Information, "Account with id {id} not found", id);
             return NotFound();
         }
         return Ok(account);
@@ -43,12 +43,12 @@ public class AccountServiceController : ControllerBase
     [HttpPost("PostAccount")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult PostAccount(Account Account)
+    public IActionResult PostAccount(Account account)
     {
-        var result = _accountLogic.AddAccount(Account);
+        var result = _accountLogic.AddAccount(account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Account with id {name} attempted to be created, but already exists", Account.Name);
+            _logger.Log(LogLevel.Information, "Account with name {name} attempted to be created, but already exists", account.Name);
             return BadRequest();
         }
         return Created($"GetAccount/{result.Name}", result);
@@ -57,12 +57,12 @@ public class AccountServiceController : ControllerBase
     [HttpPut("PutAccount")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult PutAccount(Account Account)
+    public IActionResult PutAccount(Account account)
     {
-        var result = _accountLogic.UpdateAccount(Account);
+        var result = _accountLogic.UpdateAccount(account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Account with id {name} attempted to be updated, but does not exist", Account.Name);
+            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be updated, but does not exist", account.id);
             return NotFound();
         }
         return Ok(result);
@@ -71,12 +71,12 @@ public class AccountServiceController : ControllerBase
     [HttpDelete("DeleteAccount/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteAccount(string name)
+    public IActionResult DeleteAccount(Guid id)
     {
-        var result = _accountLogic.DeleteAccount(name);
+        var result = _accountLogic.DeleteAccount(id);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Account with name {name} attempted to be deleted, but does not exist", name);
+            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be deleted, but does not exist", id);
             return NotFound();
         }
         return Ok();

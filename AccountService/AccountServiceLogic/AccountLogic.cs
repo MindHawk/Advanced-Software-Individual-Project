@@ -14,10 +14,10 @@ public class AccountLogic : IAccountLogic
         _logger = logger;
         _repository = repository;
     }
-    public Account? GetAccount(string name)
+    public Account? GetAccount(Guid id)
     {
-        _logger.Log(LogLevel.Information, "Getting Account with name {id}", name);
-        return _repository.GetAccount(name);
+        _logger.Log(LogLevel.Information, "Getting Account with id {id}", id);
+        return _repository.GetAccount(id);
     }
 
     public IEnumerable<Account> GetAccounts()
@@ -36,7 +36,7 @@ public class AccountLogic : IAccountLogic
         _logger.Log(LogLevel.Information, "Adding Account {Account}", account);
         if (_repository.AddAccount(account))
         {
-            return _repository.GetAccount(account.Name);
+            return _repository.GetAccount(account.id);
         }
         return null;
     }
@@ -44,12 +44,12 @@ public class AccountLogic : IAccountLogic
     public Account? UpdateAccount(Account account)
     {
         _logger.Log(LogLevel.Information, "Updating Account {Account}", account);
-        return _repository.UpdateAccount(account) ? _repository.GetAccount(account.Name) : null;
+        return _repository.UpdateAccount(account) ? _repository.GetAccount(account.id) : null;
     }
 
-    public bool DeleteAccount(string name)
-    { 
-        _logger.Log(LogLevel.Information, "Deleting Account with name {name}", name);
-        return _repository.DeleteAccount(name);
+    public bool DeleteAccount(Guid id)
+    {
+        _logger.Log(LogLevel.Information, "Deleting Account with id {id}", id);
+        return _repository.DeleteAccount(id);
     }
 }
