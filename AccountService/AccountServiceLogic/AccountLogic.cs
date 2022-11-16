@@ -36,7 +36,7 @@ public class AccountLogic : IAccountLogic
         _logger.Log(LogLevel.Information, "Adding Account {Account}", account);
         if (_repository.AddAccount(account))
         {
-            return _repository.GetAccount(account.id);
+            return _repository.GetAccount(account.Id);
         }
         return null;
     }
@@ -44,7 +44,7 @@ public class AccountLogic : IAccountLogic
     public Account? UpdateAccount(Account account)
     {
         _logger.Log(LogLevel.Information, "Updating Account {Account}", account);
-        return _repository.UpdateAccount(account) ? _repository.GetAccount(account.id) : null;
+        return _repository.UpdateAccount(account) ? _repository.GetAccount(account.Id) : null;
     }
 
     public bool DeleteAccount(Guid id)

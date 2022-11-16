@@ -62,7 +62,7 @@ public class AccountServiceController : ControllerBase
         var result = _accountLogic.UpdateAccount(account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be updated, but does not exist", account.id);
+            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be updated, but does not exist", account.Id);
             return NotFound();
         }
         return Ok(result);

@@ -25,7 +25,7 @@ public class AccountRepository : IAccountRepository
 
     public bool AddAccount(Account account)
     {
-        account.id = Guid.NewGuid();
+        account.Id = Guid.NewGuid();
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
     }
