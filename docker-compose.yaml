@@ -62,3 +62,14 @@ services:
       - "8095:80"
     depends_on:
       - rabbitmq
+  api_gateway:
+    container_name: api_gateway
+    restart: always
+    build:
+      context: "./API Gateway"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8100:80"
+    depends_on:
+        - forum_service
+        - account_service
