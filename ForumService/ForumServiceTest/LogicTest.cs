@@ -1,6 +1,6 @@
 using ForumServiceLogic;
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 

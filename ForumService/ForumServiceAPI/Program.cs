@@ -1,7 +1,7 @@
 using ForumServiceDAL;
 using ForumServiceLogic;
 using ForumServiceMessageBus;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

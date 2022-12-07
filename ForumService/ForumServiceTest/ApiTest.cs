@@ -1,6 +1,6 @@
 using ForumServiceAPI.Controllers;
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;

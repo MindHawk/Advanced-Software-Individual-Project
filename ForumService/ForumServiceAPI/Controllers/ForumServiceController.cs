@@ -1,5 +1,5 @@
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumServiceAPI.Controllers;

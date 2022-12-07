@@ -1,4 +1,4 @@
-namespace AccountServiceModels.Interfaces;
+namespace ForumServiceModels.Interfaces;
 
 public interface IForumRepository
 {

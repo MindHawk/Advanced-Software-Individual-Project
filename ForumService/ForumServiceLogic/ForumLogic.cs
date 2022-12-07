@@ -1,6 +1,6 @@
 ﻿using ForumServiceDAL;
-using AccountServiceModels;
-using AccountServiceModels.Interfaces;
+using ForumServiceModels;
+using ForumServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace ForumServiceLogic;
