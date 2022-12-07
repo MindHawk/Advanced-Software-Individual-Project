@@ -30,6 +30,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./AccountService
+          dockerfile: ./AccountServiceAPI/Dockerfile
           push: true
           tags: mindhawk/advanced-software-individual-project:accountservice
           labels: ${{ steps.meta.output.labels }}
@@ -38,6 +39,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./ForumService
+          dockerfile: ./ForumServiceAPI/Dockerfile
           push: true
           tags: mindhawk/advanced-software-individual-project:forumservice
           labels: ${{ steps.meta.output.labels }}
