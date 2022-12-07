@@ -27,7 +27,7 @@ services:
     restart: always
     build:
       context: "./ForumService"
-      dockerfile: "ForumServiceAPI/Dockerfile"
+      dockerfile: "Dockerfile"
     ports:
       - "8090:80"
     depends_on:
@@ -46,7 +46,7 @@ services:
     restart: always
     build:
       context: "./AccountService"
-      dockerfile: "AccountServiceAPI/Dockerfile"
+      dockerfile: "Dockerfile"
     ports:
       - "8093:80"
     depends_on:
