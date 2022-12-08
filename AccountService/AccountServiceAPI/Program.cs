@@ -20,6 +20,7 @@ switch (runningEnvironment)
             x => x.MigrationsAssembly("AccountServiceAPI")));
         break;
     case ("kubernetes"):
+        builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
         break;
     default:
         builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
