@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+        - name: apigateway
+          image: mindhawk/advanced-software-individual-project:apigateway
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: apigateway
+  ports:
+    - name: apigateway
+      protocol: TCP
+      port: 80
+      targetPort: 80
