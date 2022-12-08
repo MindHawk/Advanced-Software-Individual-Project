@@ -4,7 +4,7 @@ EXPOSE 80
 EXPOSE 443
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV Logging__Console__FormatterName=simple
-ENV USE_IN_MEMORY_DATABASE=false
+ENV HOSTED_ENVIRONMENT=docker
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src

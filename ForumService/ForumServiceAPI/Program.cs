@@ -5,19 +5,25 @@ using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-bool inMemoryDatabase = Environment.GetEnvironmentVariable("USE_IN_MEMORY_DATABASE") == "false";
+string? runningEnvironment = Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT");
 
-// Add services to the container.
-if(inMemoryDatabase)
+// Switch database depending on where we're running.
+// While running locally or debugging, an in-memory database is used.
+// When running (locally) in docker, a dockerized postgres database is used.
+// When running in kubernetes, a cloud database is used.
+switch (runningEnvironment)
 {
-    string connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString");
-    builder.Services.AddDbContext<ForumContext>(options => options.UseNpgsql(
-        connectionString, 
-        x => x.MigrationsAssembly("ForumServiceAPI")));
-}
-else
-{
-    builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+    case ("docker"):
+        string connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString");
+        builder.Services.AddDbContext<ForumContext>(options => options.UseNpgsql(
+            connectionString, 
+            x => x.MigrationsAssembly("AccountServiceAPI")));
+        break;
+    case ("kubernetes"):
+        break;
+    default:
+        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+        break;
 }
 
 builder.Services.AddControllers();
@@ -31,7 +37,7 @@ builder.Services.AddHostedService<MessageBusListener>();
 
 var app = builder.Build();
 
-app.Logger.LogInformation("Using in memory database is: " + inMemoryDatabase);
+app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
