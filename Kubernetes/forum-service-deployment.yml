@@ -15,6 +15,7 @@ spec:
       containers:
         - name: forumservice
           image: mindhawk/advanced-software-individual-project:forumservice
+          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
