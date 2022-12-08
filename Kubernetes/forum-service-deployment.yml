@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forum-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forumservice
+  template:
+    metadata:
+      labels:
+        app: forumservice
+    spec:
+      containers:
+        - name: forumservice
+          image: mindhawk/advanced-software-individual-project:forumservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forum-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: forumservice
+  ports:
+    - name: forumservice
+      protocol: TCP
+      port: 80
+      targetPort: 80
