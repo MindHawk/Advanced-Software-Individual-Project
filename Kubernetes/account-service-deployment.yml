@@ -16,6 +16,9 @@ spec:
         - name: accountservice
           image: mindhawk/advanced-software-individual-project:accountservice
           imagePullPolicy: Always
+          env:
+            - name: HOSTED_ENVIRONMENT
+              value: "kubernetes"
 ---
 apiVersion: v1
 kind: Service
