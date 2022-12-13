@@ -11,7 +11,10 @@ public class ForumRepository : IForumRepository
     public ForumRepository(ForumContext context)
     {
         _context = context;
-        _context.Database.Migrate();
+        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
+        {
+            _context.Database.Migrate();
+        }
     }
     public Forum? GetForum(string name)
     {

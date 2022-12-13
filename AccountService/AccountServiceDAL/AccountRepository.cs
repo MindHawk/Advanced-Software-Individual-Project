@@ -11,7 +11,10 @@ public class AccountRepository : IAccountRepository
     public AccountRepository(AccountContext context)
     {
         _context = context;
-        _context.Database.Migrate();
+        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
+        {
+            _context.Database.Migrate();
+        }
     }
     public Account? GetAccount(int id)
     {
