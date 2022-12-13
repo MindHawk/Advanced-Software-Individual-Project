@@ -16,6 +16,9 @@ spec:
         - name: forumservice
           image: mindhawk/advanced-software-individual-project:forumservice
           imagePullPolicy: Always
+          env:
+            - name: HOSTED_ENVIRONMENT
+              value: "kubernetes"
 ---
 apiVersion: v1
 kind: Service
