@@ -1,7 +1,7 @@
-using ForumServiceDAL;
-using ForumServiceLogic;
-using ForumServiceMessageBus;
-using ForumServiceModels.Interfaces;
+using PostServiceDAL;
+using PostServiceLogic;
+using PostServiceMessageBus;
+using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,15 +15,15 @@ switch (runningEnvironment)
 {
     case ("docker"):
         string connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString");
-        builder.Services.AddDbContext<ForumContext>(options => options.UseNpgsql(
+        builder.Services.AddDbContext<PostContext>(options => options.UseNpgsql(
             connectionString, 
-            x => x.MigrationsAssembly("ForumServiceAPI")));
+            x => x.MigrationsAssembly("PostServiceAPI")));
         break;
     case ("kubernetes"):
-        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+        builder.Services.AddDbContext<PostContext>(options => options.UseInMemoryDatabase("AccountService"));
         break;
     default:
-        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+        builder.Services.AddDbContext<PostContext>(options => options.UseInMemoryDatabase("AccountService"));
         break;
 }
 
@@ -32,8 +32,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IForumRepository, ForumRepository>();
-builder.Services.AddScoped<IForumLogic, ForumLogic>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostLogic, PostLogic>();
 builder.Services.AddHostedService<MessageBusListener>();
 
 var app = builder.Build();
@@ -46,7 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum Service");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Post Service");
         c.RoutePrefix = string.Empty;  // Set Swagger UI at apps root
     });
 }
