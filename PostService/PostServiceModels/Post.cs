@@ -5,8 +5,11 @@ namespace PostServiceModels;
 
 public class Post
 {
+    [Key]
     public int Id { get; set; }
-    [StringLength(2000, MinimumLength = 1)]
+    [Required, StringLength(2000, MinimumLength = 1)]
     public string Content { get; set; }
-    public Guid Author { get; set; }
+    [Required]
+    public string Forum { get; set; }
+    public int Author { get; set; }
 }

@@ -20,10 +20,10 @@ switch (runningEnvironment)
             x => x.MigrationsAssembly("ForumServiceAPI")));
         break;
     case ("kubernetes"):
-        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
         break;
     default:
-        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("AccountService"));
+        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
         break;
 }
 
