@@ -2,10 +2,10 @@ namespace PostServiceModels.Interfaces;
 
 public interface IPostRepository
 {
-    public Post? GetPost(string name);
+    public Post? GetPost(int id);
     public IEnumerable<Post> GetPosts();
-    public bool AddPost(Post Post);
-    public bool UpdatePost(Post Post);
-    public bool DeletePost(string name);
-    public bool PostExists(string name);
+    public bool AddPost(Post post);
+    public bool UpdatePost(Post post);
+    public bool DeletePost(int id);
+    public bool PostExists(int id);
 }

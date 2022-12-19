@@ -9,12 +9,12 @@ namespace PostServiceAPI.Controllers;
 public class PostServiceController : ControllerBase
 {
     private readonly ILogger<PostServiceController> _logger;
-    private readonly IPostLogic _PostLogic;
+    private readonly IPostLogic _postLogic;
 
-    public PostServiceController(ILogger<PostServiceController> logger, IPostLogic PostLogic)
+    public PostServiceController(ILogger<PostServiceController> logger, IPostLogic postLogic)
     {
         _logger = logger;
-        _PostLogic = PostLogic;
+        _postLogic = postLogic;
     }
 
     [HttpGet("GetPosts")]
@@ -22,22 +22,22 @@ public class PostServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetPosts()
     {
-        var Posts = _PostLogic.GetPosts();
-        return Ok(Posts);
+        var posts = _postLogic.GetPosts();
+        return Ok(posts);
     }
 
-    [HttpGet("GetPost/{name}")]
+    [HttpGet("GetPost/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetPost(string name)
+    public IActionResult GetPost(int id)
     {
-        var Post = _PostLogic.GetPost(name);
-        if (Post is null)
+        var post = _postLogic.GetPost(id);
+        if (post is null)
         {
-            _logger.Log(LogLevel.Information, "Post with name {name} not found", name);
+            _logger.Log(LogLevel.Information, "Post with name {Id} not found", id);
             return NotFound();
         }
-        return Ok(Post);
+        return Ok(post);
     }
     
     [HttpPost("PostPost")]
@@ -45,13 +45,13 @@ public class PostServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult PostPost(Post Post)
     {
-        var result = _PostLogic.AddPost(Post);
+        var result = _postLogic.AddPost(Post);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Post with id {name} attempted to be created, but already exists", Post.Name);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be created, but already exists", Post.Id);
             return BadRequest();
         }
-        return Created($"GetPost/{result.Name}", result);
+        return Created($"GetPost/{result.Id}", result);
     }
 
     [HttpPut("PutPost")]
@@ -59,24 +59,24 @@ public class PostServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult PutPost(Post Post)
     {
-        var result = _PostLogic.UpdatePost(Post);
+        var result = _postLogic.UpdatePost(Post);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Post with id {name} attempted to be updated, but does not exist", Post.Name);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be updated, but does not exist", Post.Id);
             return NotFound();
         }
         return Ok(result);
     }
     
-    [HttpDelete("DeletePost/{name}")]
+    [HttpDelete("DeletePost/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeletePost(string name)
+    public IActionResult DeletePost(int id)
     {
-        var result = _PostLogic.DeletePost(name);
+        var result = _postLogic.DeletePost(id);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Post with name {name} attempted to be deleted, but does not exist", name);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be deleted, but does not exist", id);
             return NotFound();
         }
         return Ok();

@@ -19,16 +19,16 @@ public class LogicTest
         _mockRepo = new Mock<IPostRepository>();
         _logic = new PostLogic(mockServiceLogger.Object, _mockRepo.Object);
 
-        _defaultPost = new Post{Name = "Test", Description = "This is a Post for testing"};
-        _mockRepo.Setup(repo => repo.GetPost(_defaultPost.Name)).Returns(_defaultPost);
+        _defaultPost = new Post{Id = 0, Content = "This is a post for testing"};
+        _mockRepo.Setup(repo => repo.GetPost(_defaultPost.Id)).Returns(_defaultPost);
         // This Post is not in the repository by default
-        _secondPost = new Post{Name = "Test2", Description = "This is another Post for testing"};
+        _secondPost = new Post{Id = 1, Content = "This is another post for testing"};
     }
 
     [Fact]
     public void GetPost_ExistingPost_ReturnsPost()
     {
-        var returnedValue = _logic.GetPost(_defaultPost.Name);
+        var returnedValue = _logic.GetPost(_defaultPost.Id);
         
         Assert.NotNull(returnedValue);
         Assert.Equivalent(_defaultPost, returnedValue);
@@ -37,7 +37,7 @@ public class LogicTest
     [Fact]
     public void GetPost_NonExistentPost_ReturnsNull()
     {
-        var returnedValue = _logic.GetPost(_secondPost.Name);
+        var returnedValue = _logic.GetPost(_secondPost.Id);
         
         Assert.Null(returnedValue);
     }
@@ -70,7 +70,7 @@ public class LogicTest
     public void PostPost_NewPost_ReturnsPost()
     {
         _mockRepo.Setup(repo => repo.AddPost(_secondPost)).Returns(true);
-        _mockRepo.Setup(repo => repo.GetPost(_secondPost.Name)).Returns(_secondPost);
+        _mockRepo.Setup(repo => repo.GetPost(_secondPost.Id)).Returns(_secondPost);
         
         var returnedValue = _logic.AddPost(_secondPost);
         
@@ -89,17 +89,17 @@ public class LogicTest
     [Fact]
     public void PutPost_ExistingPost_ReturnsNewPost()
     {
-        string existingPostName = _defaultPost.Name;
-        _secondPost.Name = existingPostName;
+        int existingPostName = _defaultPost.Id;
+        _secondPost.Id = existingPostName;
         _mockRepo.Setup(repo => repo.UpdatePost(_secondPost)).Returns(true);
-        _mockRepo.Setup(repo => repo.GetPost(_secondPost.Name)).Returns(_secondPost);
+        _mockRepo.Setup(repo => repo.GetPost(_secondPost.Id)).Returns(_secondPost);
         
         var returnedValue = _logic.UpdatePost(_secondPost);
         
         Assert.NotNull(returnedValue);
-        Assert.Equivalent(existingPostName, returnedValue.Name);
-        Assert.Equivalent(_secondPost.Description, returnedValue.Description);
-        Assert.Equivalent(_secondPost.Name, returnedValue.Name);
+        Assert.Equivalent(existingPostName, returnedValue.Id);
+        Assert.Equivalent(_secondPost.Content, returnedValue.Content);
+        Assert.Equivalent(_secondPost.Id, returnedValue.Id);
     }
     
     [Fact]

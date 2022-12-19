@@ -16,9 +16,9 @@ public class PostRepository : IPostRepository
             _context.Database.Migrate();
         }
     }
-    public Post? GetPost(string name)
+    public Post? GetPost(int id)
     {
-        return _context.Posts.Find(name);
+        return _context.Posts.Find(id);
     }
 
     public IEnumerable<Post> GetPosts()
@@ -26,28 +26,28 @@ public class PostRepository : IPostRepository
         return _context.Posts.ToList();
     }
 
-    public bool AddPost(Post Post)
+    public bool AddPost(Post post)
     {
-        _context.Posts.Add(Post);
+        _context.Posts.Add(post);
         return _context.SaveChanges() > 0;
     }
 
-    public bool UpdatePost(Post Post)
+    public bool UpdatePost(Post post)
     {
-        _context.Posts.Update(Post);
+        _context.Posts.Update(post);
         return _context.SaveChanges() > 0;
     }
     
-    public bool DeletePost(string name)
+    public bool DeletePost(int id)
     {
-        Post? Post = GetPost(name);
-        if (Post == null) return false;
-        _context.Posts.Remove(Post);
+        Post? post = GetPost(id);
+        if (post == null) return false;
+        _context.Posts.Remove(post);
         return _context.SaveChanges() > 0;
     }
     
-    public bool PostExists(string name)
+    public bool PostExists(int id)
     {
-        return _context.Posts.Any(e => e.Name == name);
+        return _context.Posts.Any(e => e.Id == id);
     }
 }

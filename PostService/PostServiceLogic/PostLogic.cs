@@ -14,10 +14,10 @@ public class PostLogic : IPostLogic
         _logger = logger;
         _repository = repository;
     }
-    public Post? GetPost(string name)
+    public Post? GetPost(int id)
     {
-        _logger.Log(LogLevel.Information, "Getting Post with name {id}", name);
-        return _repository.GetPost(name);
+        _logger.Log(LogLevel.Information, "Getting Post with name {id}", id);
+        return _repository.GetPost(id);
     }
 
     public IEnumerable<Post> GetPosts()
@@ -26,30 +26,30 @@ public class PostLogic : IPostLogic
         return _repository.GetPosts();
     }
 
-    public Post? AddPost(Post Post)
+    public Post? AddPost(Post post)
     {
-        if (_repository.PostExists(Post.Name))
+        if (_repository.PostExists(post.Id))
         {
-            _logger.Log(LogLevel.Information, "Post with name {name} already exists", Post.Name);
+            _logger.Log(LogLevel.Information, "Post with id {Id} already exists", post.Id);
             return null;
         }
-        _logger.Log(LogLevel.Information, "Adding Post {Post}", Post);
-        if (_repository.AddPost(Post))
+        _logger.Log(LogLevel.Information, "Adding post with id {Id}", post.Id);
+        if (_repository.AddPost(post))
         {
-            return _repository.GetPost(Post.Name);
+            return _repository.GetPost(post.Id);
         }
         return null;
     }
 
-    public Post? UpdatePost(Post Post)
+    public Post? UpdatePost(Post post)
     {
-        _logger.Log(LogLevel.Information, "Updating Post {Post}", Post);
-        return _repository.UpdatePost(Post) ? _repository.GetPost(Post.Name) : null;
+        _logger.Log(LogLevel.Information, "Updating post with id {Id}", post.Id);
+        return _repository.UpdatePost(post) ? _repository.GetPost(post.Id) : null;
     }
 
-    public bool DeletePost(string name)
+    public bool DeletePost(int id)
     { 
-        _logger.Log(LogLevel.Information, "Deleting Post with name {name}", name);
-        return _repository.DeletePost(name);
+        _logger.Log(LogLevel.Information, "Deleting post with id {Id}", id);
+        return _repository.DeletePost(id);
     }
 }
