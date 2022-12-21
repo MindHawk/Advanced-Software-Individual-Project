@@ -9,4 +9,7 @@ public interface IPostLogic
     public Post? AddPost(Post post);
     public Post? UpdatePost(Post post);
     public bool DeletePost(int id);
+    public Comment? AddComment(Comment comment);
+    public Comment? UpdateComment(Comment comment);
+    public bool DeleteComment(int id);
 }

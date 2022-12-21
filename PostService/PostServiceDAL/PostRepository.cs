@@ -55,4 +55,34 @@ public class PostRepository : IPostRepository
     {
         return _context.Comments.Where(c => c.PostId == postId).ToList();
     }
+
+    public bool AddComment(Comment comment)
+    {
+        _context.Comments.Add(comment);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool UpdateComment(Comment comment)
+    {
+        _context.Comments.Update(comment);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool DeleteComment(int id)
+    {
+        Comment? comment = _context.Comments.Find(id);
+        if (comment == null) return false;
+        _context.Comments.Remove(comment);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool CommentExists(int id)
+    {
+        return _context.Comments.Any(e => e.Id == id);
+    }
+
+    public Comment? GetComment(int id)
+    {
+        return _context.Comments.Find(id);
+    }
 }

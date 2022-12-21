@@ -78,4 +78,31 @@ public class PostLogic : IPostLogic
         _logger.Log(LogLevel.Information, "Deleting post with id {Id}", id);
         return _repository.DeletePost(id);
     }
+
+    public Comment? AddComment(Comment comment)
+    {
+        if (_repository.CommentExists(comment.Id))
+        {
+            _logger.Log(LogLevel.Information, "Comment with id {Id} already exists", comment.Id);
+            return null;
+        }
+        _logger.Log(LogLevel.Information, "Adding comment with id {Id}", comment.Id);
+        if (_repository.AddComment(comment))
+        {
+            return _repository.GetComment(comment.Id);
+        }
+        return null;
+    }
+
+    public Comment? UpdateComment(Comment comment)
+    {
+        _logger.Log(LogLevel.Information, "Updating comment with id {Id}", comment.Id);
+        return _repository.UpdateComment(comment) ? _repository.GetComment(comment.Id) : null;
+    }
+
+    public bool DeleteComment(int id)
+    {
+        _logger.Log(LogLevel.Information, "Deleting comment with id {Id}", id);
+        return _repository.DeleteComment(id);
+    }
 }

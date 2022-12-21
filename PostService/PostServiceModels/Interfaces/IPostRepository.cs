@@ -9,4 +9,9 @@ public interface IPostRepository
     public bool DeletePost(int id);
     public bool PostExists(int id);
     public List<Comment> GetCommentsForPost(int postId); 
+    public bool AddComment(Comment comment);
+    public bool UpdateComment(Comment comment);
+    public bool DeleteComment(int id);
+    public bool CommentExists(int id);
+    public Comment? GetComment(int id);
 }

@@ -93,4 +93,47 @@ public class PostServiceController : ControllerBase
         }
         return Ok();
     }
+    
+    [HttpPost("PostComment")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Comment))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult PostComment(Comment comment)
+    {
+        var result = _postLogic.AddComment(comment);
+        if (result is null)
+        {
+            _logger.Log(LogLevel.Information, "Comment with id {Id} attempted to be created, but failed", comment.Id);
+            return BadRequest("Unable to create comment");
+        }
+        return Created($"GetComment/{result.Id}", result);
+    }
+    
+    [HttpPut("PutComment")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Comment))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult PutComment(Comment comment)
+    {
+        var result = _postLogic.UpdateComment(comment);
+        if (result is null)
+        {
+            _logger.Log(LogLevel.Information, "Comment with id {Id} attempted to be updated, but does not exist", comment.Id);
+            return NotFound("Comment does not exist");
+        }
+        return Ok(result);
+    }
+
+    [HttpDelete("DeleteComment/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult DeleteComment(int id)
+    {
+        var result = _postLogic.DeleteComment(id);
+        if (result is false)
+        {
+            _logger.Log(LogLevel.Information, "Comment with id {Id} attempted to be deleted, but does not exist", id);
+            return NotFound("Comment not found");
+        }
+
+        return Ok();
+    }
 }
