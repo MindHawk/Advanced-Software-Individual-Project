@@ -47,7 +47,7 @@ public class PostServiceController : ControllerBase
         if (post is null)
         {
             _logger.Log(LogLevel.Information, "Post with name {Id} not found", id);
-            return NotFound();
+            return NotFound("Post not found");
         }
         return Ok(post);
     }
@@ -61,7 +61,7 @@ public class PostServiceController : ControllerBase
         if (result is null)
         {
             _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be created, but already exists", post.Id);
-            return BadRequest();
+            return BadRequest("Post already exists");
         }
         return Created($"GetPost/{result.Id}", result);
     }
@@ -75,7 +75,7 @@ public class PostServiceController : ControllerBase
         if (result is null)
         {
             _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be updated, but does not exist", post.Id);
-            return NotFound();
+            return NotFound("Post does not exist");
         }
         return Ok(result);
     }
@@ -89,7 +89,7 @@ public class PostServiceController : ControllerBase
         if (result is false)
         {
             _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be deleted, but does not exist", id);
-            return NotFound();
+            return NotFound("Post not found");
         }
         return Ok();
     }
