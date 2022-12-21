@@ -11,10 +11,10 @@ public class AccountServiceController : ControllerBase
     private readonly ILogger<AccountServiceController> _logger;
     private readonly IAccountLogic _accountLogic;
 
-    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic AccountLogic)
+    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic accountLogic)
     {
         _logger = logger;
-        _accountLogic = AccountLogic;
+        _accountLogic = accountLogic;
     }
 
     [HttpGet("GetAccounts")]

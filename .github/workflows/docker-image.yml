@@ -3,6 +3,10 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "AccountService/**"
+      - "Api Gateway/**"
+      - "ForumService/**"
 
 jobs:
 
@@ -10,9 +14,20 @@ jobs:
     name: Push Docker images to Docker Hub
     runs-on: ubuntu-latest
     
+    
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            AccountService:
+              - 'AccountService/**'
+            ApiGateway:
+              - 'Api Gateway/**'
+            ForumService:
+              - 'ForumService/**'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -27,6 +42,7 @@ jobs:
           images: mindhawk/advanced-software-individual-project
 
       - name: Build and publish Account Service Docker image
+        if: steps.filter.outputs.AccountService == 'true'
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./AccountService
@@ -34,7 +50,8 @@ jobs:
           tags: mindhawk/advanced-software-individual-project:accountservice
           labels: ${{ steps.meta.output.labels }}
 
-      - name: Build and publish Auth Service Docker image
+      - name: Build and publish Forum Service Docker image
+        if: steps.filter.outputs.ForumService == 'true'
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./ForumService
@@ -43,6 +60,7 @@ jobs:
           labels: ${{ steps.meta.output.labels }}
 
       - name: Build and publish API Gateway Docker image
+        if: steps.filter.outputs.ApiGateway == 'true'
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: "./API Gateway"
