@@ -1,4 +1,6 @@
-﻿using PostServiceDAL;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using PostServiceDAL;
 using PostServiceModels;
 using PostServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -9,15 +11,39 @@ public class PostLogic : IPostLogic
 {
     private readonly IPostRepository _repository;
     private readonly ILogger<IPostLogic> _logger;
+    private readonly IProblemDetailsService _problemDetails;
     public PostLogic(ILogger<IPostLogic> logger, IPostRepository repository)
     {
         _logger = logger;
         _repository = repository;
     }
+
+    public (Post post, List<Comment> comments) GetPostWithComments(int postId)
+    {
+        _logger.LogInformation("Getting post {Id} with comments", postId);
+        var post = _repository.GetPost(postId);
+        var comments = _repository.GetCommentsForPost(postId);
+        if(post == null)
+        {
+            _logger.LogWarning("Post {Id} not found", postId);
+        }
+        return (post, comments);
+    }
+
+    public List<Comment> GetCommentsForPost(int postId)
+    {
+        return _repository.GetCommentsForPost(postId);
+    }
+
     public Post? GetPost(int id)
     {
-        _logger.Log(LogLevel.Information, "Getting Post with name {id}", id);
-        return _repository.GetPost(id);
+        _logger.Log(LogLevel.Information, "Getting post with id {Id}", id);
+        var post = _repository.GetPost(id);
+        if (post == null)
+        {
+            _logger.LogWarning("Post {Id} not found", id);
+        }
+        return post;
     }
 
     public IEnumerable<Post> GetPosts()

@@ -8,4 +8,5 @@ public interface IPostRepository
     public bool UpdatePost(Post post);
     public bool DeletePost(int id);
     public bool PostExists(int id);
+    public List<Comment> GetCommentsForPost(int postId); 
 }

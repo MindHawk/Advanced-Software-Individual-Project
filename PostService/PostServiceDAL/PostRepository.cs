@@ -50,4 +50,9 @@ public class PostRepository : IPostRepository
     {
         return _context.Posts.Any(e => e.Id == id);
     }
+
+    public List<Comment> GetCommentsForPost(int postId)
+    {
+        return _context.Comments.Where(c => c.PostId == postId).ToList();
+    }
 }

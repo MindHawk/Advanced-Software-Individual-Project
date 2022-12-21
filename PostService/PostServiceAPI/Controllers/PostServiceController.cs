@@ -25,6 +25,18 @@ public class PostServiceController : ControllerBase
         var posts = _postLogic.GetPosts();
         return Ok(posts);
     }
+    
+    public IActionResult GetPostWithComments(int postId)
+    {
+        (Post post, List<Comment> comments) result = _postLogic.GetPostWithComments(postId);
+        return Ok(result);
+    }
+    
+    public IActionResult GetCommentsForPost(int postId)
+    {
+        var comments = _postLogic.GetCommentsForPost(postId);
+        return Ok(comments);
+    }
 
     [HttpGet("GetPost/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
@@ -43,12 +55,12 @@ public class PostServiceController : ControllerBase
     [HttpPost("PostPost")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult PostPost(Post Post)
+    public IActionResult PostPost(Post post)
     {
-        var result = _postLogic.AddPost(Post);
+        var result = _postLogic.AddPost(post);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be created, but already exists", Post.Id);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be created, but already exists", post.Id);
             return BadRequest();
         }
         return Created($"GetPost/{result.Id}", result);
@@ -57,12 +69,12 @@ public class PostServiceController : ControllerBase
     [HttpPut("PutPost")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult PutPost(Post Post)
+    public IActionResult PutPost(Post post)
     {
-        var result = _postLogic.UpdatePost(Post);
+        var result = _postLogic.UpdatePost(post);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be updated, but does not exist", Post.Id);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be updated, but does not exist", post.Id);
             return NotFound();
         }
         return Ok(result);

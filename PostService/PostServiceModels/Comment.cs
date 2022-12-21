@@ -12,6 +12,6 @@ public class Comment
     [Required]
     public int AccountId { get; set; }
     [Required]
-    public Post ParentPost { get; set; }
-    public Comment? ParentComment { get; set; }
+    public int PostId { get; set; }
+    public int? ParentCommentId { get; set; }
 }
