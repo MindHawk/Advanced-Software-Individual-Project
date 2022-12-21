@@ -11,10 +11,10 @@ public class AccountServiceController : ControllerBase
     private readonly ILogger<AccountServiceController> _logger;
     private readonly IAccountLogic _accountLogic;
 
-    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic AccountLogic)
+    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic accountLogic)
     {
         _logger = logger;
-        _accountLogic = AccountLogic;
+        _accountLogic = accountLogic;
     }
 
     [HttpGet("GetAccounts")]
@@ -26,7 +26,7 @@ public class AccountServiceController : ControllerBase
         return Ok(accounts);
     }
 
-    [HttpGet("GetAccount/{name}")]
+    [HttpGet("GetAccount/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetAccount(int id)
@@ -68,7 +68,7 @@ public class AccountServiceController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("DeleteAccount/{name}")]
+    [HttpDelete("DeleteAccount/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult DeleteAccount(int id)
