@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceDAL", "ForumSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceLogic", "ForumService\ForumServiceLogic\ForumServiceLogic.csproj", "{E3C226A1-61D4-471A-A88D-70544E10DEBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBus", "ForumService\ForumServiceMessageBus\ForumServiceMessageBus.csproj", "{67FE7EF4-7B79-444D-8D47-E4EE4E787815}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBusConsumer", "ForumService\ForumServiceMessageBusConsumer\ForumServiceMessageBusConsumer.csproj", "{67FE7EF4-7B79-444D-8D47-E4EE4E787815}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceTest", "ForumService\ForumServiceTest\ForumServiceTest.csproj", "{538891E4-DC66-481A-9A3C-A0E000F4ADE9}"
 EndProject
@@ -49,6 +49,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceMessageBugProducer", "PostService\PostServiceMessageBugProducer\PostServiceMessageBugProducer.csproj", "{10634A64-F097-4D6B-AD79-2058C53C735F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedDTOs", "SharedDTOs\SharedDTOs.csproj", "{984641FD-E8AD-46E2-A95F-033799DFD1F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBusProducer", "ForumServiceMessageBusProducer\ForumServiceMessageBusProducer.csproj", "{3994FFE8-54A0-458B-8CC1-E6454E7654BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +146,10 @@ Global
 		{984641FD-E8AD-46E2-A95F-033799DFD1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984641FD-E8AD-46E2-A95F-033799DFD1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{984641FD-E8AD-46E2-A95F-033799DFD1F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3994FFE8-54A0-458B-8CC1-E6454E7654BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3994FFE8-54A0-458B-8CC1-E6454E7654BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3994FFE8-54A0-458B-8CC1-E6454E7654BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3994FFE8-54A0-458B-8CC1-E6454E7654BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7} = {98B4D01D-F254-4035-923F-E8A3B3297E77}
@@ -165,5 +171,6 @@ Global
 		{7D3D63CC-EB35-4FEF-93B8-83B931012C35} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
 		{05DABCF1-A46E-4C36-96CA-DE29534EB1D7} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
 		{10634A64-F097-4D6B-AD79-2058C53C735F} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
+		{3994FFE8-54A0-458B-8CC1-E6454E7654BC} = {98B4D01D-F254-4035-923F-E8A3B3297E77}
 	EndGlobalSection
 EndGlobal

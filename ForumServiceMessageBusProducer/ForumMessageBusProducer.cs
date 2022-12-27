@@ -1,18 +1,23 @@
 ﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
+using SharedDTOs;
 
-namespace PostServiceMessageBugProducer;
+namespace ForumServiceMessageBusProducer;
 
-public class MessageBusProducer
+public class ForumMessageBusProducer
 {
-    private readonly ILogger<MessageBusProducer> _logger;
-    public MessageBusProducer(ILogger<MessageBusProducer> logger)
+    private readonly ILogger<ForumMessageBusProducer> _logger;
+    private readonly IConfiguration _configuration;
+    public ForumMessageBusProducer(ILogger<ForumMessageBusProducer> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
-    public void SendMessage(string message)
+    public void SendMessage(ForumShared forum)
     {
         var factory = new ConnectionFactory() { HostName = "rabbitmq" };
         using (var connection = factory.CreateConnection())
@@ -20,7 +25,7 @@ public class MessageBusProducer
         {
             channel.ExchangeDeclare(exchange: "forum_created", ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
             
-            
+            var message = JsonConvert.SerializeObject(forum);
             var body = Encoding.UTF8.GetBytes(message);
 
             var properties = channel.CreateBasicProperties();

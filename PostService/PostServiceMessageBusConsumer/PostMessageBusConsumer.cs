@@ -11,24 +11,21 @@ using SharedDTOs;
 
 namespace PostServiceMessageBus;
 
-public class MessageBusConsumer : BackgroundService
+public class PostMessageBusConsumer : BackgroundService
 {
-    private readonly IConfiguration _configuration;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<MessageBusConsumer> _logger;
-    private IConnection _connection;
+    private readonly ILogger<PostMessageBusConsumer> _logger;
     private IModel _channel;
     private string _queueName;
 
-    public MessageBusConsumer(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<MessageBusConsumer> logger)
+    public PostMessageBusConsumer(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<PostMessageBusConsumer> logger)
     {
-        _configuration = configuration;
         _scopeFactory = scopeFactory;
         _logger = logger;
         
-        var factory = new ConnectionFactory() { HostName = _configuration["RabbitMQ:Host"] };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        var factory = new ConnectionFactory() { HostName = configuration["RabbitMQ:Host"] };
+        IConnection connection = factory.CreateConnection();
+        _channel = connection.CreateModel();
         _channel.ExchangeDeclare(exchange:"forum_created", type:ExchangeType.Direct);
         _queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queue: _queueName, exchange: "forum_created", routingKey: "forum_created");
