@@ -1,4 +1,5 @@
 using ForumServiceLogic;
+using ForumServiceMessageBusProducer;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -16,8 +17,9 @@ public class LogicTest
     public LogicTest()
     {
         Mock<ILogger<ForumLogic>> mockServiceLogger = new();
+        Mock<ForumMessageBusProducer> mockProducer = new();
         _mockRepo = new Mock<IForumRepository>();
-        _logic = new ForumLogic(mockServiceLogger.Object, _mockRepo.Object);
+        _logic = new ForumLogic(mockServiceLogger.Object, _mockRepo.Object, mockProducer.Object);
 
         _defaultForum = new Forum{Name = "Test", Description = "This is a forum for testing"};
         _mockRepo.Setup(repo => repo.GetForum(_defaultForum.Name)).Returns(_defaultForum);
