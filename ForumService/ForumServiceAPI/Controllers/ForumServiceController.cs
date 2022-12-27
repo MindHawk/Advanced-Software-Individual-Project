@@ -34,7 +34,7 @@ public class ForumServiceController : ControllerBase
         var forum = _forumLogic.GetForum(name);
         if (forum is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with name {name} not found", name);
+            _logger.Log(LogLevel.Information, "Forum with name {Name} not found", name);
             return NotFound();
         }
         return Ok(forum);
@@ -48,7 +48,7 @@ public class ForumServiceController : ControllerBase
         var result = _forumLogic.AddForum(forum);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with id {name} attempted to be created, but already exists", forum.Name);
+            _logger.Log(LogLevel.Information, "Forum with name {Name} attempted to be created, but already exists", forum.Name);
             return BadRequest();
         }
         return Created($"GetForum/{result.Name}", result);
@@ -62,7 +62,7 @@ public class ForumServiceController : ControllerBase
         var result = _forumLogic.UpdateForum(forum);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Forum with id {name} attempted to be updated, but does not exist", forum.Name);
+            _logger.Log(LogLevel.Information, "Forum with name {Name} attempted to be updated, but does not exist", forum.Name);
             return NotFound();
         }
         return Ok(result);
@@ -76,7 +76,7 @@ public class ForumServiceController : ControllerBase
         var result = _forumLogic.DeleteForum(name);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Forum with name {name} attempted to be deleted, but does not exist", name);
+            _logger.Log(LogLevel.Information, "Forum with name {Name} attempted to be deleted, but does not exist", name);
             return NotFound();
         }
         return Ok();

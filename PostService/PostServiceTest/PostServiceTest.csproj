@@ -26,7 +26,7 @@
       <ProjectReference Include="..\PostServiceAPI\PostServiceAPI.csproj" />
       <ProjectReference Include="..\PostServiceDAL\PostServiceDAL.csproj" />
       <ProjectReference Include="..\PostServiceLogic\PostServiceLogic.csproj" />
-      <ProjectReference Include="..\PostServiceMessageBus\PostServiceMessageBus.csproj" />
+      <ProjectReference Include="..\PostServiceMessageBusConsumer\PostServiceMessageBusConsumer.csproj" />
       <ProjectReference Include="..\PostServiceModels\PostServiceModels.csproj" />
     </ItemGroup>
 

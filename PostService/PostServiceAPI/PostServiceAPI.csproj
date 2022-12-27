@@ -19,7 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PostServiceLogic\PostServiceLogic.csproj" />
-      <ProjectReference Include="..\PostServiceMessageBus\PostServiceMessageBus.csproj" />
+      <ProjectReference Include="..\PostServiceMessageBusConsumer\PostServiceMessageBusConsumer.csproj" />
       <ProjectReference Include="..\PostServiceModels\PostServiceModels.csproj" />
     </ItemGroup>
 
