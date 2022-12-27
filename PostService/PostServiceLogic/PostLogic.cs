@@ -23,9 +23,10 @@ public class PostLogic : IPostLogic
         _logger.LogInformation("Getting post {Id} with comments", postId);
         var post = _repository.GetPost(postId);
         var comments = _repository.GetCommentsForPost(postId);
-        if(post == null)
+        if (post == null)
         {
             _logger.LogWarning("Post {Id} not found", postId);
+            return (null, null);
         }
         return (post, comments);
     }
@@ -84,6 +85,12 @@ public class PostLogic : IPostLogic
         if (_repository.CommentExists(comment.Id))
         {
             _logger.Log(LogLevel.Information, "Comment with id {Id} already exists", comment.Id);
+            return null;
+        }
+
+        if (!_repository.PostExists(comment.PostId))
+        {
+            _logger.Log(LogLevel.Information, "Comment attempted to be added, but parent post {Id} does not exist", comment.PostId);
             return null;
         }
         _logger.Log(LogLevel.Information, "Adding comment with id {Id}", comment.Id);

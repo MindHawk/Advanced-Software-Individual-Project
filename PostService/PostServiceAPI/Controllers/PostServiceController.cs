@@ -26,27 +26,31 @@ public class PostServiceController : ControllerBase
         return Ok(posts);
     }
     
+    [HttpGet("GetPostWithComments/{postId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((Post,IEnumerable<Comment>)) )]
     public IActionResult GetPostWithComments(int postId)
     {
         (Post post, List<Comment> comments) result = _postLogic.GetPostWithComments(postId);
         return Ok(result);
     }
     
+    [HttpGet("GetCommentsForPost/{postId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Comment>) )]
     public IActionResult GetCommentsForPost(int postId)
     {
         var comments = _postLogic.GetCommentsForPost(postId);
         return Ok(comments);
     }
 
-    [HttpGet("GetPost/{id}")]
+    [HttpGet("GetPost/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetPost(int id)
+    public IActionResult GetPost(int postId)
     {
-        var post = _postLogic.GetPost(id);
+        var post = _postLogic.GetPost(postId);
         if (post is null)
         {
-            _logger.Log(LogLevel.Information, "Post with name {Id} not found", id);
+            _logger.Log(LogLevel.Information, "Post with name {Id} not found", postId);
             return NotFound("Post not found");
         }
         return Ok(post);
@@ -80,15 +84,15 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("DeletePost/{id}")]
+    [HttpDelete("DeletePost/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeletePost(int id)
+    public IActionResult DeletePost(int postId)
     {
-        var result = _postLogic.DeletePost(id);
+        var result = _postLogic.DeletePost(postId);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be deleted, but does not exist", id);
+            _logger.Log(LogLevel.Information, "Post with id {Id} attempted to be deleted, but does not exist", postId);
             return NotFound("Post not found");
         }
         return Ok();
@@ -122,15 +126,15 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("DeleteComment/{id}")]
+    [HttpDelete("DeleteComment/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteComment(int id)
+    public IActionResult DeleteComment(int postId)
     {
-        var result = _postLogic.DeleteComment(id);
+        var result = _postLogic.DeleteComment(postId);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Comment with id {Id} attempted to be deleted, but does not exist", id);
+            _logger.Log(LogLevel.Information, "Comment with id {Id} attempted to be deleted, but does not exist", postId);
             return NotFound("Comment not found");
         }
 
