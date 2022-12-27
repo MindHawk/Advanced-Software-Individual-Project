@@ -34,6 +34,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
+builder.Services.AddScoped<ForumMessageBusProducer>();
 builder.Services.AddHostedService<MessageBusConsumer>();
 
 var app = builder.Build();
