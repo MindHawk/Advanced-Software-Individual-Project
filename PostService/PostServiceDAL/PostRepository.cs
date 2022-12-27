@@ -2,6 +2,7 @@
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SharedDTOs;
 
 namespace PostServiceDAL;
 
@@ -84,5 +85,11 @@ public class PostRepository : IPostRepository
     public Comment? GetComment(int id)
     {
         return _context.Comments.Find(id);
+    }
+    
+    public bool AddForum(ForumShared forum)
+    {
+        _context.Forums.Add(forum);
+        return _context.SaveChanges() > 0;
     }
 }

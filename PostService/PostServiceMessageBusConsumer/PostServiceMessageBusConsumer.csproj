@@ -8,12 +8,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\SharedDTOs\SharedDTOs.csproj" />
       <ProjectReference Include="..\PostServiceDAL\PostServiceDAL.csproj" />
       <ProjectReference Include="..\PostServiceLogic\PostServiceLogic.csproj" />
       <ProjectReference Include="..\PostServiceModels\PostServiceModels.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>

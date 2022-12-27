@@ -1,6 +1,6 @@
 ﻿namespace SharedDTOs;
 
-public class Forum
+public class ForumShared
 {
     public string Name { get; set; }
 }
