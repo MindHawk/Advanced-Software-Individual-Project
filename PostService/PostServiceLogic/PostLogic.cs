@@ -11,8 +11,8 @@ public class PostLogic : IPostLogic
 {
     private readonly IPostRepository _repository;
     private readonly ILogger<IPostLogic> _logger;
-    private readonly IProblemDetailsService _problemDetails;
-    public PostLogic(ILogger<IPostLogic> logger, IPostRepository repository)
+
+    public PostLogic(ILogger<PostLogic> logger, IPostRepository repository)
     {
         _logger = logger;
         _repository = repository;
