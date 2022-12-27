@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace AuthService.Messaging;
+namespace PostServiceMessageBugProducer;
 
 public class MessageBusProducer
 {
