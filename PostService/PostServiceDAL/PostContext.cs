@@ -1,6 +1,5 @@
 using PostServiceModels;
 using Microsoft.EntityFrameworkCore;
-using SharedDTOs;
 
 namespace PostServiceDAL;
 

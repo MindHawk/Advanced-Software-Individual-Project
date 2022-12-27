@@ -1,6 +1,7 @@
 using ForumServiceDAL;
 using ForumServiceLogic;
 using ForumServiceMessageBus;
+using ForumServiceMessageBusProducer;
 using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

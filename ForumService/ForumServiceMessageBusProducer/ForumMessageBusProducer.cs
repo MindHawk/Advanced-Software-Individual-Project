@@ -1,9 +1,9 @@
 ﻿using System.Text;
+using ForumServiceModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
-using SharedDTOs;
 
 namespace ForumServiceMessageBusProducer;
 

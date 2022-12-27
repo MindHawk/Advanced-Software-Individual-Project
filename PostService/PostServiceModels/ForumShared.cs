@@ -1,4 +1,4 @@
-﻿namespace SharedDTOs;
+namespace PostServiceModels;
 
 public class ForumShared
 {

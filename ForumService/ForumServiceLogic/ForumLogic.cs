@@ -3,7 +3,6 @@ using ForumServiceMessageBusProducer;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
-using SharedDTOs;
 
 namespace ForumServiceLogic;
 

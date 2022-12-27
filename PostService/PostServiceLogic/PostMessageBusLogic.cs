@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
+using PostServiceModels;
 using PostServiceModels.Interfaces;
-using SharedDTOs;
 
 namespace PostServiceLogic;
 

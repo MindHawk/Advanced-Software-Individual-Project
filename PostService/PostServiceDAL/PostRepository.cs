@@ -2,7 +2,6 @@
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SharedDTOs;
 
 namespace PostServiceDAL;
 

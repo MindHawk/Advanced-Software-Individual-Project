@@ -1,5 +1,3 @@
-using SharedDTOs;
-
 namespace PostServiceModels.Interfaces;
 
 public interface IPostMessageBusLogic

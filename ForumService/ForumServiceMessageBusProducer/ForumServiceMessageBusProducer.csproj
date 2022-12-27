@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SharedDTOs\SharedDTOs.csproj" />
+      <ProjectReference Include="..\ForumServiceModels\ForumServiceModels.csproj" />
     </ItemGroup>
 
 </Project>

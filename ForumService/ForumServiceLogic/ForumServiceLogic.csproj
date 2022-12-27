@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SharedDTOs\SharedDTOs.csproj" />
       <ProjectReference Include="..\ForumServiceDAL\ForumServiceDAL.csproj" />
       <ProjectReference Include="..\ForumServiceMessageBusProducer\ForumServiceMessageBusProducer.csproj" />
       <ProjectReference Include="..\ForumServiceModels\ForumServiceModels.csproj" />
