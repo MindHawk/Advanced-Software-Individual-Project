@@ -15,9 +15,9 @@ public class PostMessageBusLogic : IPostMessageBusLogic
         _logger = logger;
     }
     
-    public bool AddForum(ForumShared forumShared)
+    public bool AddForum(Forum forum)
     {
         _logger.LogInformation("Adding forum to database");
-        return _postRepository.AddForum(forumShared);
+        return _postRepository.AddForum(forum);
     }
 }

@@ -26,7 +26,7 @@ public class PostMessageBusConsumer : BackgroundService
         var factory = new ConnectionFactory() { HostName = configuration["RabbitMQ:Host"] };
         IConnection connection = factory.CreateConnection();
         _channel = connection.CreateModel();
-        _channel.ExchangeDeclare(exchange:"forum_created", type:ExchangeType.Direct);
+        _channel.ExchangeDeclare(exchange:"forum_created", type:ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
         _queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queue: _queueName, exchange: "forum_created", routingKey: "forum_created");
     }
@@ -63,7 +63,7 @@ public class PostMessageBusConsumer : BackgroundService
     {
         _logger.LogInformation("Parsing message: {Message}", message);
         using IServiceScope scope = _scopeFactory.CreateScope();
-        ForumShared? forum = JsonConvert.DeserializeObject<ForumShared>(message);
+        Forum? forum = JsonConvert.DeserializeObject<Forum>(message);
         if (forum?.Name == null)
         {
             _logger.LogWarning("Message is not a forum: {Message}", message);

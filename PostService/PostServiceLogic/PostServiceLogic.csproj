@@ -8,7 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PostServiceDAL\PostServiceDAL.csproj" />
-      <ProjectReference Include="..\PostServiceMessageBugProducer\PostServiceMessageBugProducer.csproj" />
+      <ProjectReference Include="..\PostServiceMessageBusProducer\PostServiceMessageBusProducer.csproj" />
       <ProjectReference Include="..\PostServiceModels\PostServiceModels.csproj" />
     </ItemGroup>
 

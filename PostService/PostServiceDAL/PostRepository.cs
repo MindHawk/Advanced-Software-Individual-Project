@@ -86,7 +86,7 @@ public class PostRepository : IPostRepository
         return _context.Comments.Find(id);
     }
     
-    public bool AddForum(ForumShared forum)
+    public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
         return _context.SaveChanges() > 0;

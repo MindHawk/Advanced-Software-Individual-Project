@@ -35,6 +35,7 @@ public class ForumMessageBusProducer
                 routingKey: "forum_created",
                 basicProperties: null,
                 body: body);
+            _logger.LogInformation("Sent message: {Message} to message bus", message);
         }
     }
 }

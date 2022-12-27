@@ -14,5 +14,5 @@ public interface IPostRepository
     public bool DeleteComment(int id);
     public bool CommentExists(int id);
     public Comment? GetComment(int id);
-    public bool AddForum(ForumShared forum);
+    public bool AddForum(Forum forum);
 }

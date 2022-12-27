@@ -2,5 +2,5 @@ namespace PostServiceModels.Interfaces;
 
 public interface IPostMessageBusLogic
 {
-    public bool AddForum(ForumShared forumShared);
+    public bool AddForum(Forum forum);
 }
