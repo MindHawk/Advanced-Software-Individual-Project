@@ -8,16 +8,16 @@ using RabbitMQ.Client.Events;
 
 namespace ForumServiceMessageBus;
 
-public class MessageBusListener : BackgroundService
+public class MessageBusConsumer : BackgroundService
 {
     private readonly IConfiguration _configuration;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<MessageBusListener> _logger;
+    private readonly ILogger<MessageBusConsumer> _logger;
     private IConnection _connection;
     private IModel _channel;
     private string _queueName;
 
-    public MessageBusListener(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<MessageBusListener> logger)
+    public MessageBusConsumer(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<MessageBusConsumer> logger)
     {
         _configuration = configuration;
         _scopeFactory = scopeFactory;
@@ -44,7 +44,7 @@ public class MessageBusListener : BackgroundService
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                _logger.LogInformation("Message received: {message}", message);
+                _logger.LogInformation("Message received: {Message}", message);
             }
         };
         

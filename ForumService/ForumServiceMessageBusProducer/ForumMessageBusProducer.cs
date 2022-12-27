@@ -19,7 +19,7 @@ public class ForumMessageBusProducer
 
     public void SendMessage(ForumShared forum)
     {
-        var factory = new ConnectionFactory() { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory() { HostName = _configuration["RabbitMQ:Host"] };
         using (var connection = factory.CreateConnection())
         using (var channel = connection.CreateModel())
         {
