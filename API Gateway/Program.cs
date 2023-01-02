@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("Ocelot.json", false, true)
+    //.AddJsonFile("Ocelot.json", false, true)
+    .AddJsonFile($"Ocelot.{builder.Environment.EnvironmentName}.json", false, true)
     .AddEnvironmentVariables();
 builder.Services.AddOcelot(builder.Configuration);
 
