@@ -15,8 +15,8 @@ public class PostMessageBusConsumer : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<PostMessageBusConsumer> _logger;
-    private IModel _channel;
-    private string _queueName;
+    private readonly IModel _channel;
+    private readonly string _queueName;
 
     public PostMessageBusConsumer(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<PostMessageBusConsumer> logger)
     {
@@ -26,9 +26,10 @@ public class PostMessageBusConsumer : BackgroundService
         var factory = new ConnectionFactory() { HostName = configuration["RabbitMQ:Host"] };
         IConnection connection = factory.CreateConnection();
         _channel = connection.CreateModel();
-        _channel.ExchangeDeclare(exchange:"forum_created", type:ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
+        _channel.ExchangeDeclare(exchange:"post_exchange", type:ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
         _queueName = _channel.QueueDeclare().QueueName;
-        _channel.QueueBind(queue: _queueName, exchange: "forum_created", routingKey: "forum_created");
+        _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "forum_created");
+        _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "forum_deleted");
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,12 +42,24 @@ public class PostMessageBusConsumer : BackgroundService
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-
-            
             _logger.LogInformation("Message received: {Message}", message);
-            if (ParseMessage(message))
+            bool success = false;
+            switch (ea.RoutingKey)
+            {
+                case "forum_created":
+                    success = ParseForumCreatedMessage(message);
+                    break;
+                case "forum_deleted":
+                    
+                    break;
+                default:
+                    _logger.LogError("No handler for routing key {RoutingKey}", ea.RoutingKey);
+                    break;
+            }
+            if (success)
             {
                 _channel.BasicAck(ea.DeliveryTag, false);
+                _logger.LogInformation("Message processed: {Message}", message);
             }
             else
             {
@@ -59,9 +72,9 @@ public class PostMessageBusConsumer : BackgroundService
         return Task.CompletedTask;
     }
 
-    private bool ParseMessage(string message)
+    private bool ParseForumCreatedMessage(string message)
     {
-        _logger.LogInformation("Parsing message: {Message}", message);
+        _logger.LogInformation("Parsing forum created message: {Message}", message);
         using IServiceScope scope = _scopeFactory.CreateScope();
         Forum? forum = JsonConvert.DeserializeObject<Forum>(message);
         if (forum?.Name == null)
@@ -69,7 +82,22 @@ public class PostMessageBusConsumer : BackgroundService
             _logger.LogWarning("Message is not a forum: {Message}", message);
             return false;
         }
-
+        
+        var logic = scope.ServiceProvider.GetRequiredService<IPostMessageBusLogic>();
+        return logic.AddForum(forum);
+    }
+    
+    private bool ParseForumDeletedMessage(string message)
+    {
+        _logger.LogInformation("Parsing forum deleted message: {Message}", message);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        Forum? forum = JsonConvert.DeserializeObject<Forum>(message);
+        if (forum?.Name == null)
+        {
+            _logger.LogWarning("Message is not a forum: {Message}", message);
+            return false;
+        }
+        
         var logic = scope.ServiceProvider.GetRequiredService<IPostMessageBusLogic>();
         return logic.AddForum(forum);
     }

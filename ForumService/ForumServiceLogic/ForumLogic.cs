@@ -40,7 +40,7 @@ public class ForumLogic : IForumLogic
         if (_repository.AddForum(forum))
         {
             ForumShared forumShared = new ForumShared{ Name = forum.Name, };
-            _producer.SendMessage(forumShared);
+            _producer.SendForumCreatedMessage(forumShared);
             return _repository.GetForum(forum.Name);
         }
         return null;

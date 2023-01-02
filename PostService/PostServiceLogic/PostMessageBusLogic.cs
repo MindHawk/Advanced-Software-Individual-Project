@@ -20,4 +20,10 @@ public class PostMessageBusLogic : IPostMessageBusLogic
         _logger.LogInformation("Adding forum to database");
         return _postRepository.AddForum(forum);
     }
+
+    public bool DeleteForum(Forum forum)
+    {
+        _logger.LogInformation("Deleting forum from database");
+        return _postRepository.DeleteForum(forum);
+    }
 }

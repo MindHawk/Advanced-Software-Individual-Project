@@ -85,10 +85,22 @@ public class PostRepository : IPostRepository
     {
         return _context.Comments.Find(id);
     }
-    
+
+    public bool ForumExists(string name)
+    {
+        return _context.Forums.Any(e => e.Name == name);
+    }
+
     public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool DeleteForum(Forum forum)
+    {
+        forum.Deleted = true;
+        _context.Forums.Update(forum);
         return _context.SaveChanges() > 0;
     }
 }

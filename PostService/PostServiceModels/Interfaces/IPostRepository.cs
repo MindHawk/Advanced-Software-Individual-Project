@@ -14,5 +14,16 @@ public interface IPostRepository
     public bool DeleteComment(int id);
     public bool CommentExists(int id);
     public Comment? GetComment(int id);
+    /// <summary>
+    /// This is an internal method used to check if a forum is valid
+    /// </summary>
+    public bool ForumExists(string name);
+    /// <summary>
+    /// This method should only be called by message events
+    /// </summary>
     public bool AddForum(Forum forum);
+    /// <summary>
+    /// This method should only be called by message events
+    /// </summary>
+    public bool DeleteForum(Forum forum);
 }

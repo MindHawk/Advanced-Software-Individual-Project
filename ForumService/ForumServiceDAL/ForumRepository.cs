@@ -18,12 +18,13 @@ public class ForumRepository : IForumRepository
     }
     public Forum? GetForum(string name)
     {
-        return _context.Forums.Find(name);
+        Forum? forum = _context.Forums.Find(name);
+        return forum?.Deleted == true ? null : forum;
     }
 
     public IEnumerable<Forum> GetForums()
     {
-        return _context.Forums.ToList();
+        return _context.Forums.Where(f => f.Deleted == false).ToList();
     }
 
     public bool AddForum(Forum forum)
@@ -42,8 +43,8 @@ public class ForumRepository : IForumRepository
     {
         Forum? forum = GetForum(name);
         if (forum == null) return false;
-        _context.Forums.Remove(forum);
-        return _context.SaveChanges() > 0;
+        forum.Deleted = true;
+        return UpdateForum(forum);
     }
     
     public bool ForumExists(string name)

@@ -35,6 +35,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostLogic, PostLogic>();
+builder.Services.AddScoped<IPostMessageBusLogic, PostMessageBusLogic>();
 builder.Services.AddHostedService<PostMessageBusConsumer>();
 
 var app = builder.Build();

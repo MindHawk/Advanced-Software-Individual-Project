@@ -60,12 +60,12 @@ public class PostLogic : IPostLogic
             _logger.Log(LogLevel.Information, "Post with id {Id} already exists", post.Id);
             return null;
         }
-        _logger.Log(LogLevel.Information, "Adding post with id {Id}", post.Id);
-        if (_repository.AddPost(post))
+        if (!_repository.ForumExists(post.Forum))
         {
-            return _repository.GetPost(post.Id);
+            _logger.LogInformation("Forum {Forum} does not exist for post {Id}", post.Forum, post.Id);
         }
-        return null;
+        _logger.Log(LogLevel.Information, "Adding post with id {Id}", post.Id);
+        return _repository.AddPost(post) ? _repository.GetPost(post.Id) : null;
     }
 
     public Post? UpdatePost(Post post)
