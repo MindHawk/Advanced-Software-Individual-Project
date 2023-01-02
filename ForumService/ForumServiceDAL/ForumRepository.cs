@@ -26,6 +26,7 @@ public class ForumRepository : IForumRepository
     public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
+        forum.Deleted = false;
         return _context.SaveChanges() > 0;
     }
 
