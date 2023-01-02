@@ -26,6 +26,7 @@ switch (runningEnvironment)
         builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
         break;
 }
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(b =>

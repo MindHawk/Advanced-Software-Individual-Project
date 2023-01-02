@@ -27,6 +27,14 @@ switch (runningEnvironment)
         break;
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -56,13 +64,6 @@ switch (runningEnvironment)
         }
         break;
 }
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(b =>
-    {
-        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
