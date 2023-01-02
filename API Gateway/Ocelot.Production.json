@@ -60,8 +60,5 @@
       "UpstreamPathTemplate": "/api/forum/{name}",
       "UpstreamHttpMethod": ["Delete"]
     }
-  ],
-  "GlobalConfiguration": {
-    "BaseUrl": "s6app.com"
-  }
+  ]
 }

@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "forum-clusterip-srv",
-          "Port": 80
+          "Host": "host.docker.internal",
+          "Port": 8090
         }
       ],
       "UpstreamPathTemplate": "/api/forums",
@@ -17,8 +17,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "forum-clusterip-srv",
-          "Port": 80
+          "Host": "host.docker.internal",
+          "Port": 8090
         }
       ],
       "UpstreamPathTemplate": "/api/forum/{name}",
@@ -29,8 +29,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "forum-clusterip-srv",
-          "Port": 80
+          "Host": "host.docker.internal",
+          "Port": 8090
         }
       ],
       "UpstreamPathTemplate": "/api/forum",
@@ -41,8 +41,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "forum-clusterip-srv",
-          "Port": 80
+          "Host": "host.docker.internal",
+          "Port": 8090
         }
       ],
       "UpstreamPathTemplate": "/api/forum",
@@ -53,15 +53,12 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "forum-clusterip-srv",
-          "Port": 80
+          "Host": "host.docker.internal",
+          "Port": 8090
         }
       ],
       "UpstreamPathTemplate": "/api/forum/{name}",
       "UpstreamHttpMethod": ["Delete"]
     }
-  ],
-  "GlobalConfiguration": {
-    "BaseUrl": "s6app.com"
-  }
+  ]
 }
