@@ -26,6 +26,13 @@ switch (runningEnvironment)
         builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
         break;
 }
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,6 +46,21 @@ builder.Services.AddHostedService<MessageBusListener>();
 var app = builder.Build();
 
 app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
+
+switch (runningEnvironment)
+{
+    case ("docker"):
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<AccountContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
+        break;
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,6 +76,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

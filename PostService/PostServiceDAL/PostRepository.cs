@@ -11,10 +11,6 @@ public class PostRepository : IPostRepository
     public PostRepository(PostContext context)
     {
         _context = context;
-        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
-        {
-            _context.Database.Migrate();
-        }
     }
     public Post? GetPost(int id)
     {

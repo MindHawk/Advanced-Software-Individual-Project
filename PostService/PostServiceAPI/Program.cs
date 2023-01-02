@@ -42,6 +42,21 @@ var app = builder.Build();
 
 app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
 
+switch (runningEnvironment)
+{
+    case ("docker"):
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<PostContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            // DbInitializer.Initialize(context);
+        }
+        break;
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
