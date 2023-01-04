@@ -47,10 +47,10 @@ public class PostLogic : IPostLogic
         return post;
     }
 
-    public IEnumerable<Post> GetPosts()
+    public IEnumerable<Post> GetPosts(string forumName)
     {
-        _logger.Log(LogLevel.Information, "Getting all Posts");
-        return _repository.GetPosts();
+        _logger.Log(LogLevel.Information, "Getting all Posts for forum {ForumName}", forumName);
+        return _repository.GetPosts(forumName);
     }
 
     public Post? AddPost(Post post)

@@ -61,7 +61,7 @@
       "UpstreamHttpMethod": ["Delete"]
     },
     {
-      "DownstreamPathTemplate": "/PostService/GetPosts",
+      "DownstreamPathTemplate": "/PostService/GetPosts/{forumName}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -69,7 +69,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/posts",
+      "UpstreamPathTemplate": "/api/posts/{forumName}",
       "UpstreamHttpMethod": ["Get"]
     },
     {

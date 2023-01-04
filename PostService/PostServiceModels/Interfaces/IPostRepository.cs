@@ -3,7 +3,7 @@ namespace PostServiceModels.Interfaces;
 public interface IPostRepository
 {
     public Post? GetPost(int id);
-    public IEnumerable<Post> GetPosts();
+    public IEnumerable<Post> GetPosts(string forumName);
     public bool AddPost(Post post);
     public bool UpdatePost(Post post);
     public bool DeletePost(int id);

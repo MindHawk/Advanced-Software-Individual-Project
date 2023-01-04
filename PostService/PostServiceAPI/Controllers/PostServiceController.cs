@@ -17,12 +17,16 @@ public class PostServiceController : ControllerBase
         _postLogic = postLogic;
     }
 
-    [HttpGet("GetPosts")]
+    [HttpGet("GetPosts/{forumName}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Post>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetPosts()
+    public IActionResult GetPosts(string forumName)
     {
-        var posts = _postLogic.GetPosts();
+        var posts = _postLogic.GetPosts(forumName);
+        if (!posts.Any())
+        {
+            return NotFound();
+        }
         return Ok(posts);
     }
     

@@ -1,4 +1,5 @@
-﻿using PostServiceModels;
+﻿using System.ComponentModel.Design;
+using PostServiceModels;
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,9 +18,13 @@ public class PostRepository : IPostRepository
         return _context.Posts.Find(id);
     }
 
-    public IEnumerable<Post> GetPosts()
+    public IEnumerable<Post> GetPosts(string forumName)
     {
-        return _context.Posts.ToList();
+        if (ForumExists(forumName))
+        {
+            return _context.Posts.Where(p => p.Forum == forumName).ToList();
+        }
+        return new List<Post>();
     }
 
     public bool AddPost(Post post)

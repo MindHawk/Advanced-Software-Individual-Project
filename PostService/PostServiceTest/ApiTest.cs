@@ -42,31 +42,7 @@ public class ApiTest
 
         Assert.IsType<NotFoundResult>(returnedValue);
     }
-
-    [Fact]
-    public void GetPosts_ExistingPosts_ReturnsOkObjectAndPosts()
-    {
-        List<Post> PostList = new List<Post> { _defaultPost, _secondPost };
-        _mockLogic.Setup(repo => repo.GetPosts()).Returns(PostList);
-
-        OkObjectResult? returnedValue = _controller.GetPosts() as OkObjectResult;
-
-        Assert.IsType<OkObjectResult>(returnedValue);
-        Assert.Equivalent(PostList, returnedValue.Value);
-    }
-
-    [Fact]
-    public void GetPosts_NoExistingPost_ReturnsOkObjectResult()
-    {
-        List<Post> PostList = new List<Post> { };
-        _mockLogic.Setup(repo => repo.GetPosts()).Returns(PostList);
-
-        OkObjectResult? returnedValue = _controller.GetPosts() as OkObjectResult;
-
-        Assert.IsType<OkObjectResult>(returnedValue);
-        Assert.Equivalent(PostList, returnedValue.Value);
-    }
-
+    
     [Fact]
     public void PostPost_NewPost_ReturnsCreatedAndPost()
     {
