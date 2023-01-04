@@ -25,7 +25,8 @@ public class PostServiceController : ControllerBase
         var posts = _postLogic.GetPosts(forumName);
         if (posts == null)
         {
-            return NotFound();
+            _logger.LogInformation("Forum {ForumName} not found", forumName);
+            return NotFound("Forum does not exist");
         }
         return Ok(posts);
     }
