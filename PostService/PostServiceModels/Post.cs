@@ -14,4 +14,5 @@ public class Post
     [Required]
     public string Forum { get; set; }
     public int Author { get; set; }
+    public bool Deleted { get; set; }
 }

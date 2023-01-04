@@ -22,9 +22,8 @@ public class PostRepository : IPostRepository
     {
         if (ForumExists(forumName))
         {
-            return _context.Posts.Where(p => p.Forum == forumName).ToList();
+            return _context.Posts.Where(p => p.Forum == forumName && p.Deleted == false).ToList();
         }
-
         return null;
     }
 
@@ -44,18 +43,20 @@ public class PostRepository : IPostRepository
     {
         Post? post = GetPost(id);
         if (post == null) return false;
-        _context.Posts.Remove(post);
-        return _context.SaveChanges() > 0;
+        post.Deleted = true;
+        post.Content = "This post has been deleted";
+        post.Author = -1;
+        return UpdatePost(post);
     }
     
     public bool PostExists(int id)
     {
-        return _context.Posts.Any(e => e.Id == id);
+        return _context.Posts.Any(e => e.Id == id && e.Deleted == false);
     }
 
     public List<Comment> GetCommentsForPost(int postId)
     {
-        return _context.Comments.Where(c => c.PostId == postId).ToList();
+        return _context.Comments.Where(c => c.PostId == postId && c.Deleted == false).ToList();
     }
 
     public bool AddComment(Comment comment)
@@ -74,13 +75,15 @@ public class PostRepository : IPostRepository
     {
         Comment? comment = _context.Comments.Find(id);
         if (comment == null) return false;
-        _context.Comments.Remove(comment);
-        return _context.SaveChanges() > 0;
+        comment.Deleted = true;
+        comment.Content = "This comment has been deleted";
+        comment.Author = -1;
+        return UpdateComment(comment);
     }
 
     public bool CommentExists(int id)
     {
-        return _context.Comments.Any(e => e.Id == id);
+        return _context.Comments.Any(e => e.Id == id && e.Deleted == false);
     }
 
     public Comment? GetComment(int id)
@@ -90,7 +93,7 @@ public class PostRepository : IPostRepository
 
     public bool ForumExists(string name)
     {
-        return _context.Forums.Any(e => e.Name == name);
+        return _context.Forums.Any(e => e.Name == name && e.Deleted == false);
     }
 
     public bool AddForum(Forum forum)
