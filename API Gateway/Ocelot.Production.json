@@ -73,7 +73,7 @@
       "UpstreamHttpMethod": ["Get"]
     },
     {
-      "DownstreamPathTemplate": "/PostService/GetPostWithComments/{postId}",
+      "DownstreamPathTemplate": "/PostService/GetPost/{postId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -109,12 +109,26 @@
       "UpstreamHttpMethod": ["Post"]
     },
     {
+      "DownstreamPathTemplate": "/PostService/GetCommentsForPost/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "post-clusterip-srv",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/comments/{postId}",
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    },
+    {
       "DownstreamPathTemplate": "/PostService/DeletePost/{postId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "post-clusterip-srv",
-          "Port": 8095
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/post/{postId}",
@@ -126,7 +140,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "post-clusterip-srv",
-          "Port": 8095
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/comment/{commentId}",

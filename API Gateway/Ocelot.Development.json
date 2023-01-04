@@ -73,7 +73,7 @@
       "UpstreamHttpMethod": ["Get"]
     },
     {
-      "DownstreamPathTemplate": "/PostService/GetPostWithComments/{postId}",
+      "DownstreamPathTemplate": "/PostService/GetPost/{postId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -108,6 +108,20 @@
       "UpstreamPathTemplate": "/api/comment",
       "UpstreamHttpMethod": [
         "Post"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/PostService/GetCommentsForPost/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8095
+        }
+      ],
+      "UpstreamPathTemplate": "/api/comments/{postId}",
+      "UpstreamHttpMethod": [
+        "Get"
       ]
     },
     {
