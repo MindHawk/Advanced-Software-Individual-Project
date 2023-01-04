@@ -32,6 +32,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.WithOrigins("http://localhost:5173/").AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountLogic, AccountLogic>();
 builder.Services.AddHostedService<MessageBusListener>();
