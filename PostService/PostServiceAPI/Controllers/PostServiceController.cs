@@ -36,6 +36,11 @@ public class PostServiceController : ControllerBase
     public IActionResult GetPostWithComments(int postId)
     {
         (Post post, List<Comment> comments) result = _postLogic.GetPostWithComments(postId);
+        if (result is (null, null))
+        {
+            _logger.LogInformation("Post {PostId} not found", postId);
+            return NotFound("Post not found");
+        }
         return Ok(result);
     }
     
@@ -44,6 +49,11 @@ public class PostServiceController : ControllerBase
     public IActionResult GetCommentsForPost(int postId)
     {
         var comments = _postLogic.GetCommentsForPost(postId);
+        if (comments is null)
+        {
+            _logger.LogInformation("Post {PostId} not found", postId);
+            return NotFound("Post not found");
+        }
         return Ok(comments);
     }
 
