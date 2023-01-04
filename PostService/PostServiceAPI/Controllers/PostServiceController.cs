@@ -23,7 +23,7 @@ public class PostServiceController : ControllerBase
     public IActionResult GetPosts(string forumName)
     {
         var posts = _postLogic.GetPosts(forumName);
-        if (!posts.Any())
+        if (posts == null)
         {
             return NotFound();
         }

@@ -18,13 +18,14 @@ public class PostRepository : IPostRepository
         return _context.Posts.Find(id);
     }
 
-    public IEnumerable<Post> GetPosts(string forumName)
+    public IEnumerable<Post>? GetPosts(string forumName)
     {
         if (ForumExists(forumName))
         {
             return _context.Posts.Where(p => p.Forum == forumName).ToList();
         }
-        return new List<Post>();
+
+        return null;
     }
 
     public bool AddPost(Post post)
