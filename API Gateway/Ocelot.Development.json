@@ -106,7 +106,33 @@
         }
       ],
       "UpstreamPathTemplate": "/api/comment",
-      "UpstreamHttpMethod": ["Post"]
+      "UpstreamHttpMethod": [
+        "Post"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/PostService/DeletePost/{postId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8095
+        }
+      ],
+      "UpstreamPathTemplate": "/api/post/{postId}",
+      "UpstreamHttpMethod": ["Delete"]
+    },
+    {
+      "DownstreamPathTemplate": "/PostService/DeleteComment/{commentId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8095
+        }
+      ],
+      "UpstreamPathTemplate": "/api/comment/{commentId}",
+      "UpstreamHttpMethod": ["Delete"]
     }
   ]
 }
