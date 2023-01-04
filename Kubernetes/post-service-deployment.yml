@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postservice
+  template:
+    metadata:
+      labels:
+        app: postservice
+    spec:
+      containers:
+        - name: postservice
+          image: mindhawk/advanced-software-individual-project:postservice
+          imagePullPolicy: Always
+          env:
+            - name: HOSTED_ENVIRONMENT
+              value: "kubernetes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: postservice
+  ports:
+    - name: postservice
+      protocol: TCP
+      port: 80
+      targetPort: 80
