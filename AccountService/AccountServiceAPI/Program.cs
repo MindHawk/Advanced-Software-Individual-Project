@@ -1,3 +1,4 @@
+using AccountServiceAPI.Attributes;
 using AccountServiceDAL;
 using AccountServiceLogic;
 using AccountServiceMessageBus;
@@ -42,6 +43,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountLogic, AccountLogic>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
 builder.Services.AddHostedService<MessageBusListener>();
 
 var app = builder.Build();
