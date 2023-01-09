@@ -1,8 +1,11 @@
+using System.Text;
+using ForumServiceAPI.Attributes;
 using ForumServiceDAL;
 using ForumServiceLogic;
 using ForumServiceMessageBus;
 using ForumServiceMessageBusProducer;
 using ForumServiceModels.Interfaces;
+using Google.Apis.Auth.AspNetCore3;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +46,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
 builder.Services.AddScoped<ForumMessageBusProducer>();
 builder.Services.AddHostedService<MessageBusConsumer>();
 

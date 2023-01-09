@@ -1,6 +1,7 @@
 using PostServiceModels;
 using PostServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using PostServiceAPI.Attributes;
 
 namespace PostServiceAPI.Controllers;
 
@@ -71,6 +72,7 @@ public class PostServiceController : ControllerBase
         return Ok(post);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostPost")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +87,7 @@ public class PostServiceController : ControllerBase
         return Created($"GetPost/{result.Id}", result);
     }
 
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPut("PutPost")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -99,6 +102,7 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpDelete("DeletePost/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -113,6 +117,7 @@ public class PostServiceController : ControllerBase
         return Ok();
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostComment")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Comment))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -127,6 +132,7 @@ public class PostServiceController : ControllerBase
         return Created($"GetComment/{result.Id}", result);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPut("PutComment")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Comment))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -141,6 +147,7 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
 
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpDelete("DeleteComment/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -154,5 +161,11 @@ public class PostServiceController : ControllerBase
         }
 
         return Ok();
+    }
+    
+    private int GetUserIdFromToken()
+    {
+        int id = HttpContext.Items["UserId"] as int? ?? 0;
+        return id;
     }
 }

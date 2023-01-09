@@ -1,5 +1,7 @@
+using ForumServiceAPI.Attributes;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumServiceAPI.Controllers;
@@ -16,7 +18,7 @@ public class ForumServiceController : ControllerBase
         _logger = logger;
         _forumLogic = forumLogic;
     }
-
+    
     [HttpGet("GetForums")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Forum>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -25,7 +27,7 @@ public class ForumServiceController : ControllerBase
         var forums = _forumLogic.GetForums();
         return Ok(forums);
     }
-
+    
     [HttpGet("GetForum/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,11 +42,15 @@ public class ForumServiceController : ControllerBase
         return Ok(forum);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostForum")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult PostForum(Forum forum)
     {
+        int id = GetUserIdFromToken();
+        if (id == 0) { return BadRequest(); }
+        forum.AdminId = id;
         var result = _forumLogic.AddForum(forum);
         if (result is null)
         {
@@ -54,6 +60,7 @@ public class ForumServiceController : ControllerBase
         return Created($"GetForum/{result.Name}", result);
     }
 
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPut("PutForum")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Forum))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -68,6 +75,7 @@ public class ForumServiceController : ControllerBase
         return Ok(result);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpDelete("DeleteForum/{name}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -80,5 +88,11 @@ public class ForumServiceController : ControllerBase
             return NotFound();
         }
         return Ok();
+    }
+    
+    private int GetUserIdFromToken()
+    {
+        int id = HttpContext.Items["UserId"] as int? ?? 0;
+        return id;
     }
 }

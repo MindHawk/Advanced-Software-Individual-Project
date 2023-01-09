@@ -3,6 +3,7 @@ using PostServiceLogic;
 using PostServiceMessageBus;
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using PostServiceAPI.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 string? runningEnvironment = Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT");
@@ -44,6 +45,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostLogic, PostLogic>();
 builder.Services.AddScoped<IPostMessageBusLogic, PostMessageBusLogic>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
 builder.Services.AddHostedService<PostMessageBusConsumer>();
 
 var app = builder.Build();
