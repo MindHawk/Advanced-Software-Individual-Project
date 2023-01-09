@@ -24,7 +24,18 @@ public class AccountMessageBusProducer
 
     public void SendAccountCreatedMessage(Account account)
     {
-        IModel channel = SetupChannel(account, out string message, out byte[] body);
+        using var connection = _connectionFactory.CreateConnection();
+        using var channel = connection.CreateModel();
+
+        channel.ExchangeDeclare(exchange: "forum_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
+            arguments: null);
+        channel.ExchangeDeclare(exchange: "post_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
+            arguments: null);
+        var message = JsonConvert.SerializeObject(account);
+        var body = Encoding.UTF8.GetBytes(message);
+
+        var properties = channel.CreateBasicProperties();
+        properties.Persistent = true;
 
         channel.BasicPublish(exchange: "forum_exchange",
             routingKey: "account_created",
@@ -39,7 +50,18 @@ public class AccountMessageBusProducer
 
     public void SendAccountDeletedMessage(Account account)
     {
-        IModel channel = SetupChannel(account, out string message, out byte[] body);
+        using var connection = _connectionFactory.CreateConnection();
+        using var channel = connection.CreateModel();
+
+        channel.ExchangeDeclare(exchange: "forum_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
+            arguments: null);
+        channel.ExchangeDeclare(exchange: "post_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
+            arguments: null);
+        var message = JsonConvert.SerializeObject(account);
+        var body = Encoding.UTF8.GetBytes(message);
+
+        var properties = channel.CreateBasicProperties();
+        properties.Persistent = true;
 
         channel.BasicPublish(exchange: "forum_exchange",
             routingKey: "account_deleted",
@@ -50,22 +72,5 @@ public class AccountMessageBusProducer
             basicProperties: null,
             body: body);
         _logger.LogInformation("Sent account deleted message: {Message} to message bus", message);
-    }
-
-    private IModel SetupChannel(Account account, out string message, out byte[] body)
-    {
-        using var connection = _connectionFactory.CreateConnection();
-        using var channel = connection.CreateModel();
-
-        channel.ExchangeDeclare(exchange: "forum_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
-            arguments: null);
-        channel.ExchangeDeclare(exchange: "post_exchange", ExchangeType.Direct, durable: true, autoDelete: false,
-            arguments: null);
-        message = JsonConvert.SerializeObject(account);
-        body = Encoding.UTF8.GetBytes(message);
-
-        var properties = channel.CreateBasicProperties();
-        properties.Persistent = true;
-        return channel;
     }
 }
