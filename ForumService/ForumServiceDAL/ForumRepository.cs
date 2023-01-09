@@ -54,7 +54,13 @@ public class ForumRepository : IForumRepository
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
     }
-    
+
+    public bool DeleteAccount(Account account)
+    {
+        _context.Accounts.Remove(account);
+        return _context.SaveChanges() > 0;
+    }
+
     public int? GetAccountIdFromGoogleId(string googleId)
     {
         int id;

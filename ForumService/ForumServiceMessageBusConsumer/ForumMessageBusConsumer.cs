@@ -48,6 +48,9 @@ public class ForumMessageBusConsumer : BackgroundService
                 case "account_created":
                     success = ParseAccountCreatedMessage(message);
                     break;
+                case "account_deleted":
+                    success = ParseAccountDeletedMessage(message);
+                    break;
                 default:
                     _logger.LogError("No handler for routing key {RoutingKey}", ea.RoutingKey);
                     break;
@@ -70,16 +73,31 @@ public class ForumMessageBusConsumer : BackgroundService
 
     private bool ParseAccountCreatedMessage(string message)
     {
-        _logger.LogInformation("Parsing forum created message: {Message}", message);
+        _logger.LogInformation("Parsing account created message: {Message}", message);
         using IServiceScope scope = _scopeFactory.CreateScope();
         Account? account = JsonConvert.DeserializeObject<Account>(message);
         if (account?.Name == null)
         {
-            _logger.LogWarning("Message is not a forum: {Message}", message);
+            _logger.LogWarning("Message is not an account: {Message}", message);
             return false;
         }
         
         var logic = scope.ServiceProvider.GetRequiredService<IForumLogic>();
         return logic.AddAccount(account);
+    }
+    
+    private bool ParseAccountDeletedMessage(string message)
+    {
+        _logger.LogInformation("Parsing account deleted message: {Message}", message);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        Account? account = JsonConvert.DeserializeObject<Account>(message);
+        if (account?.Name == null)
+        {
+            _logger.LogWarning("Message is not an account: {Message}", message);
+            return false;
+        }
+        
+        var logic = scope.ServiceProvider.GetRequiredService<IForumLogic>();
+        return logic.DeleteAccount(account);
     }
 }

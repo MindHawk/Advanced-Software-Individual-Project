@@ -74,7 +74,12 @@ public class ForumLogic : IForumLogic
     {
         return _repository.AddAccount(account);
     }
-    
+
+    public bool DeleteAccount(Account account)
+    {
+        return _repository.DeleteAccount(account);
+    }
+
     public int GetAccountIdFromGoogleId(string googleId)
     {
         return _repository.GetAccountIdFromGoogleId(googleId) ?? -1;

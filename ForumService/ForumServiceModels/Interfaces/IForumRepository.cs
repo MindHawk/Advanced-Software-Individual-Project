@@ -13,5 +13,6 @@ public interface IForumRepository
     /// </summary>
     public bool ForumExists(string name);
     public bool AddAccount(Account account);
+    public bool DeleteAccount(Account account);
     public int? GetAccountIdFromGoogleId(string googleId);
 }

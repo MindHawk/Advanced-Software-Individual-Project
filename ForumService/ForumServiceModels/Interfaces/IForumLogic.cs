@@ -8,5 +8,6 @@ public interface IForumLogic
     public Forum? UpdateForum(Forum forum);
     public bool DeleteForum(string name, int id);
     public bool AddAccount(Account account);
+    public bool DeleteAccount(Account account);
     public int GetAccountIdFromGoogleId(string googleId);
 }
