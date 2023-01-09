@@ -48,7 +48,7 @@ builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
 builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
 builder.Services.AddScoped<ForumMessageBusProducer>();
-builder.Services.AddHostedService<MessageBusConsumer>();
+builder.Services.AddHostedService<ForumMessageBusConsumer>();
 
 var app = builder.Build();
 

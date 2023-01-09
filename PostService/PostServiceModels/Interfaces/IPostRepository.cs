@@ -26,4 +26,5 @@ public interface IPostRepository
     /// This method should only be called by message events
     /// </summary>
     public bool DeleteForum(Forum forum);
+    public bool AddAccount(Account account);
 }

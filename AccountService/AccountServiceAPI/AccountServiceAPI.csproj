@@ -20,7 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\AccountServiceLogic\AccountServiceLogic.csproj" />
-        <ProjectReference Include="..\AccountServiceMessageBus\AccountServiceMessageBus.csproj" />
+        <ProjectReference Include="..\AccountServiceMessageBusProducer\AccountServiceMessageBusProducer.csproj" />
         <ProjectReference Include="..\AccountServiceModels\AccountServiceModels.csproj" />
     </ItemGroup>
 

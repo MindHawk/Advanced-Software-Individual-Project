@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceAPI", "Accoun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceLogic", "AccountService\AccountServiceLogic\AccountServiceLogic.csproj", "{B1213A70-CFF2-43DF-8B7A-D7BB6EC2C5C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceMessageBus", "AccountService\AccountServiceMessageBus\AccountServiceMessageBus.csproj", "{40AFC283-BBCF-47CB-B70D-D9EF47DCA89F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceMessageBusProducer", "AccountService\AccountServiceMessageBusProducer\AccountServiceMessageBusProducer.csproj", "{40AFC283-BBCF-47CB-B70D-D9EF47DCA89F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceModels", "AccountService\AccountServiceModels\AccountServiceModels.csproj", "{CA30473A-5F07-4CB0-BC13-19B92AE29E43}"
 EndProject

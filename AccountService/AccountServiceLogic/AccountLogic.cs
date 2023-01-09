@@ -1,4 +1,4 @@
-﻿using AccountServiceDAL;
+using AccountServiceDAL;
 using AccountServiceModels;
 using AccountServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -9,10 +9,12 @@ public class AccountLogic : IAccountLogic
 {
     private readonly IAccountRepository _repository;
     private readonly ILogger<IAccountLogic> _logger;
-    public AccountLogic(ILogger<IAccountLogic> logger, IAccountRepository repository)
+    private readonly AccountMessageBusProducer _producer;
+    public AccountLogic(ILogger<IAccountLogic> logger, IAccountRepository repository, AccountMessageBusProducer producer)
     {
         _logger = logger;
         _repository = repository;
+        _producer = producer;
     }
     public Account? GetAccount(int id)
     {
@@ -36,6 +38,7 @@ public class AccountLogic : IAccountLogic
         _logger.Log(LogLevel.Information, "Adding Account {Account}", account);
         if (_repository.AddAccount(account))
         {
+            _producer.SendAccountCreatedMessage(account);
             return _repository.GetAccount(account.Id);
         }
         return null;
@@ -50,6 +53,16 @@ public class AccountLogic : IAccountLogic
     public bool DeleteAccount(int id)
     {
         _logger.Log(LogLevel.Information, "Deleting Account with id {id}", id);
-        return _repository.DeleteAccount(id);
+        Account? account = _repository.GetAccount(id);
+        if (account == null)
+        {
+            return false;
+        }
+
+        if (!_repository.DeleteAccount(id)) return false;
+        _producer.SendAccountDeletedMessage(account);
+        return true;
+
+    }
     }
 }

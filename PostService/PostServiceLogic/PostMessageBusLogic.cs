@@ -17,13 +17,19 @@ public class PostMessageBusLogic : IPostMessageBusLogic
     
     public bool AddForum(Forum forum)
     {
-        _logger.LogInformation("Adding forum to database");
+        _logger.LogInformation("Adding forum to database from message bus");
         return _postRepository.AddForum(forum);
     }
 
     public bool DeleteForum(Forum forum)
     {
-        _logger.LogInformation("Deleting forum from database");
+        _logger.LogInformation("Deleting forum from database from message bus");
         return _postRepository.DeleteForum(forum);
+    }
+    
+    public bool AddAccount(Account account)
+    {
+        _logger.LogInformation("Adding account to database from message bus");
+        return _postRepository.AddAccount(account);
     }
 }

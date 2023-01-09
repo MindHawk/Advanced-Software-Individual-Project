@@ -48,4 +48,10 @@ public class ForumRepository : IForumRepository
     {
         return _context.Forums.Any(e => e.Name == name);
     }
+
+    public bool AddAccount(Account account)
+    {
+        _context.Accounts.Add(account);
+        return _context.SaveChanges() > 0;
+    }
 }

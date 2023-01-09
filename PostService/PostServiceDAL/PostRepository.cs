@@ -108,4 +108,10 @@ public class PostRepository : IPostRepository
         _context.Forums.Update(forum);
         return _context.SaveChanges() > 0;
     }
+
+    public bool AddAccount(Account account)
+    {
+        _context.Accounts.Add(account);
+        return _context.SaveChanges() > 0;
+    }
 }

@@ -1,7 +1,7 @@
 using AccountServiceAPI.Attributes;
 using AccountServiceDAL;
 using AccountServiceLogic;
-using AccountServiceMessageBus;
+using AccountServiceMessageBusProducer;
 using AccountServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,8 +43,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountLogic, AccountLogic>();
+builder.Services.AddScoped<AccountMessageBusProducer>();
 builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
-builder.Services.AddHostedService<MessageBusListener>();
 
 var app = builder.Build();
 

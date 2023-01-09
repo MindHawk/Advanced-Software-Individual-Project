@@ -7,4 +7,5 @@ public interface IForumLogic
     public Forum? AddForum(Forum forum);
     public Forum? UpdateForum(Forum forum);
     public bool DeleteForum(string name);
+    public bool AddAccount(Account account);
 }

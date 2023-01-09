@@ -30,6 +30,8 @@ public class PostMessageBusConsumer : BackgroundService
         _queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "forum_created");
         _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "forum_deleted");
+        _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "account_created");
+        _channel.QueueBind(queue: _queueName, exchange: "post_exchange", routingKey: "account_deleted");
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,7 +52,13 @@ public class PostMessageBusConsumer : BackgroundService
                     success = ParseForumCreatedMessage(message);
                     break;
                 case "forum_deleted":
-                    
+                    success = ParseForumDeletedMessage(message);
+                    break;
+                case "account_created":
+                    success = ParseAccountCreatedMessage(message);
+                    break;
+                case "account_deleted":
+                    success = ParseAccountDeletedMessage(message);
                     break;
                 default:
                     _logger.LogError("No handler for routing key {RoutingKey}", ea.RoutingKey);
@@ -99,6 +107,36 @@ public class PostMessageBusConsumer : BackgroundService
         }
         
         var logic = scope.ServiceProvider.GetRequiredService<IPostMessageBusLogic>();
-        return logic.AddForum(forum);
+        return logic.DeleteForum(forum);
+    }
+    
+    private bool ParseAccountCreatedMessage(string message)
+    {
+        _logger.LogInformation("Parsing forum deleted message: {Message}", message);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        Account? account = JsonConvert.DeserializeObject<Account>(message);
+        if (account?.Name == null)
+        {
+            _logger.LogWarning("Message is not a forum: {Message}", message);
+            return false;
+        }
+        
+        var logic = scope.ServiceProvider.GetRequiredService<IPostMessageBusLogic>();
+        return logic.AddAccount(account);
+    }
+    
+    private bool ParseAccountDeletedMessage(string message)
+    {
+        _logger.LogInformation("Parsing forum deleted message: {Message}", message);
+        using IServiceScope scope = _scopeFactory.CreateScope();
+        Account? account = JsonConvert.DeserializeObject<Account>(message);
+        if (account?.Name == null)
+        {
+            _logger.LogWarning("Message is not a forum: {Message}", message);
+            return false;
+        }
+        
+        var logic = scope.ServiceProvider.GetRequiredService<IPostMessageBusLogic>();
+        return logic.AddAccount(account);
     }
 }

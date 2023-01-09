@@ -12,7 +12,7 @@ COPY ["AccountServiceAPI/AccountServiceAPI.csproj", "AccountServiceAPI/"]
 COPY ["AccountServiceDAL/AccountServiceDAL.csproj", "AccountServiceDAL/"]
 COPY ["AccountServiceLogic/AccountServiceLogic.csproj", "AccountServiceLogic/"]
 COPY ["AccountServiceModels/AccountServiceModels.csproj", "AccountServiceModels/"]
-COPY ["AccountServiceMessageBus/AccountServiceMessageBus.csproj", "AccountServiceMessageBus/"]
+COPY ["AccountServiceMessageBusProducer/AccountServiceMessageBusProducer.csproj", "AccountServiceMessageBusProducer/"]
 RUN dotnet restore "AccountServiceAPI/AccountServiceAPI.csproj"
 COPY . .
 WORKDIR "/src/AccountServiceAPI"

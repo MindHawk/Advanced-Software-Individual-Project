@@ -1,4 +1,4 @@
-﻿using ForumServiceDAL;
+using ForumServiceDAL;
 using ForumServiceMessageBusProducer;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
@@ -56,5 +56,10 @@ public class ForumLogic : IForumLogic
     { 
         _logger.Log(LogLevel.Information, "Deleting forum with name {Name}", name);
         return _repository.DeleteForum(name);
+    }
+
+    public bool AddAccount(Account account)
+    {
+        return _repository.AddAccount(account);
     }
 }

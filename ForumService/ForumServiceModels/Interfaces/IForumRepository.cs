@@ -12,4 +12,5 @@ public interface IForumRepository
     /// This method should not be returnable through the API.
     /// </summary>
     public bool ForumExists(string name);
+    public bool AddAccount(Account account);
 }
