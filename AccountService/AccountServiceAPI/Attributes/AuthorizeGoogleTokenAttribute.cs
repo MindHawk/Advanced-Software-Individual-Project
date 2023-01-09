@@ -1,6 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -28,27 +28,33 @@ public class AuthorizeGoogleTokenAttribute : AuthorizeAttribute, IAuthorizationF
             }
             else
             {
-                var tokenString = stringValues.ToString().Replace("Bearer ", "");
-                _logger.LogInformation("Parsing token: {TokenString}", tokenString);
-                var userDetails = await GoogleJsonWebSignature.ValidateAsync(tokenString);
+                string tokenString = stringValues.ToString().Replace("Bearer ", "");
+
+                JwtSecurityToken token = new JwtSecurityToken(tokenString);
+                string googleId = token.Subject;
+                string username = token.Claims.First(c => c.Type == "name").Value;
+                context.HttpContext.Items.Add("GoogleId", googleId);
+                context.HttpContext.Items.Add("Username", username);
+                
+                _logger.LogInformation("Parsing token: {Token}", tokenString);
+                GoogleJsonWebSignature.Payload? userDetails = await GoogleJsonWebSignature.ValidateAsync(tokenString);
                 if (userDetails.Audience.ToString() != _configuration["Google:ClientId"])
                 {
                     _logger.LogInformation("Token audience {Audience} not valid", userDetails.Audience.ToString());
                     context.Result = new UnauthorizedResult();
                     return;
                 }
-                int userId = int.Parse(userDetails.Subject);
-                string username = userDetails.Name;
-                if (username == "")
+
+                googleId = userDetails.Subject;
+                username = userDetails.Name;
+                if (username == "" || googleId == "")
                 {
-                    _logger.LogInformation("Token username {Username} not valid", username);
+                    _logger.LogInformation("Token username or subject is empty");
                     context.Result = new UnauthorizedResult();
                     return;
                 }
 
                 _logger.LogInformation("Token is valid");
-                context.HttpContext.Items.Add("UserId", userId);
-                context.HttpContext.Items.Add("Username", username);
             }
         }
         catch (InvalidJwtException e)
