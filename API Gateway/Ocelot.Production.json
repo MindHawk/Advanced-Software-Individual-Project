@@ -145,6 +145,30 @@
       ],
       "UpstreamPathTemplate": "/api/comment/{commentId}",
       "UpstreamHttpMethod": ["Delete"]
+    },
+    {
+      "DownstreamPathTemplate": "/AccountService/PostAccount",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "account-clusterip-srv",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/register",
+      "UpstreamHttpMethod": ["Post"]
+    },
+    {
+      "DownstreamPathTemplate": "/AccountService/DeleteAccount",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "account-clusterip-srv",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account",
+      "UpstreamHttpMethod": ["Delete"]
     }
   ]
 }
