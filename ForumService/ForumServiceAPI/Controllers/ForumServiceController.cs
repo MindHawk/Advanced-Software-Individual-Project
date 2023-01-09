@@ -48,8 +48,13 @@ public class ForumServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult PostForum(Forum forum)
     {
-        int id = GetUserIdFromToken();
-        if (id == 0) { return BadRequest(); }
+        int id = GetIdFromGoogleId();
+        if(id == -1)
+        {
+            _logger.Log(LogLevel.Error, "User id not found in token");
+            return BadRequest();
+        }
+
         forum.AdminId = id;
         var result = _forumLogic.AddForum(forum);
         if (result is null)
@@ -66,6 +71,13 @@ public class ForumServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult PutForum(Forum forum)
     {
+        int id = GetIdFromGoogleId();
+        if(id == -1)
+        {
+            _logger.Log(LogLevel.Error, "User id not found in token");
+            return BadRequest();
+        }
+
         var result = _forumLogic.UpdateForum(forum);
         if (result is null)
         {
@@ -81,7 +93,14 @@ public class ForumServiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult DeleteForum(string name)
     {
-        var result = _forumLogic.DeleteForum(name);
+        int id = GetIdFromGoogleId();
+        if(id == -1)
+        {
+            _logger.Log(LogLevel.Error, "User id not found in token");
+            return BadRequest();
+        }
+
+        var result = _forumLogic.DeleteForum(name, id);
         if (result is false)
         {
             _logger.Log(LogLevel.Information, "Forum with name {Name} attempted to be deleted, but does not exist", name);
@@ -93,7 +112,7 @@ public class ForumServiceController : ControllerBase
     private int GetIdFromGoogleId()
     {
         string googleId = HttpContext.Items["GoogleId"] as string ?? "";
-        int id = _postLogic.GetAccountIdFromGoogleId(googleId);
+        int id = _forumLogic.GetAccountIdFromGoogleId(googleId);
         return id;
     }
 }

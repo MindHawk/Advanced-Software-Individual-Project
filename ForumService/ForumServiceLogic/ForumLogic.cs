@@ -1,4 +1,4 @@
-using ForumServiceDAL;
+﻿using ForumServiceDAL;
 using ForumServiceMessageBusProducer;
 using ForumServiceModels;
 using ForumServiceModels.Interfaces;
@@ -39,7 +39,7 @@ public class ForumLogic : IForumLogic
         _logger.Log(LogLevel.Information, "Adding forum {Forum}", forum.Name);
         if (_repository.AddForum(forum))
         {
-            ForumShared forumShared = new ForumShared{ Name = forum.Name, };
+            ForumShared forumShared = new() { Name = forum.Name, AdminId = forum.AdminId};
             _producer.SendForumCreatedMessage(forumShared);
             return _repository.GetForum(forum.Name);
         }
@@ -52,9 +52,21 @@ public class ForumLogic : IForumLogic
         return _repository.UpdateForum(forum) ? _repository.GetForum(forum.Name) : null;
     }
 
-    public bool DeleteForum(string name)
-    { 
-        _logger.Log(LogLevel.Information, "Deleting forum with name {Name}", name);
+    public bool DeleteForum(string name, int id)
+    {
+        Forum? forum = _repository.GetForum(name);
+        if (forum == null)
+        {
+            _logger.LogInformation("Attempted to delete forum that does not exist: {Name}", name);
+            return false;
+        }
+
+        if (forum.AdminId != id)
+        {
+            _logger.LogInformation("User with id {Id} attempted to delete forum {Name} but is not admin", id, name);
+            return false;
+        }
+
         return _repository.DeleteForum(name);
     }
 
