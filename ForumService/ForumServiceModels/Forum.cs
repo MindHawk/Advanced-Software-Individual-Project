@@ -11,7 +11,7 @@ public class Forum
     public string Name { get; set; }
     [Required, StringLength(300)]
     public string Description { get; set; }
-    public Guid AdminId { get; set; }
+    public int AdminId { get; set; }
     // We don't delete data, but we do hide it.
     public bool Deleted { get; set; }
 }

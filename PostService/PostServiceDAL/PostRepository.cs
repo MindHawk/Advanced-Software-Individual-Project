@@ -114,4 +114,19 @@ public class PostRepository : IPostRepository
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
     }
+    
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
+    }
 }

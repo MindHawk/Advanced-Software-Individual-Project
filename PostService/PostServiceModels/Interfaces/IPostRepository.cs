@@ -27,4 +27,5 @@ public interface IPostRepository
     /// </summary>
     public bool DeleteForum(Forum forum);
     public bool AddAccount(Account account);
+    public int? GetAccountIdFromGoogleId(string googleId);
 }

@@ -90,9 +90,10 @@ public class ForumServiceController : ControllerBase
         return Ok();
     }
     
-    private int GetUserIdFromToken()
+    private int GetIdFromGoogleId()
     {
-        int id = HttpContext.Items["UserId"] as int? ?? 0;
+        string googleId = HttpContext.Items["GoogleId"] as string ?? "";
+        int id = _postLogic.GetAccountIdFromGoogleId(googleId);
         return id;
     }
 }

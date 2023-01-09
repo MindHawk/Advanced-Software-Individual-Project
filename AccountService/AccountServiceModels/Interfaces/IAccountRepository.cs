@@ -8,4 +8,5 @@ public interface IAccountRepository
     public bool UpdateAccount(Account account);
     public bool DeleteAccount(int id);
     public bool AccountExists(string name);
+    public int? GetAccountIdFromGoogleId(string googleId);
 }

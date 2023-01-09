@@ -112,4 +112,9 @@ public class PostLogic : IPostLogic
         _logger.Log(LogLevel.Information, "Deleting comment with id {Id}", id);
         return _repository.DeleteComment(id);
     }
+    
+    public int GetAccountIdFromGoogleId(string googleId)
+    {
+        return _repository.GetAccountIdFromGoogleId(googleId) ?? -1;
+    }
 }

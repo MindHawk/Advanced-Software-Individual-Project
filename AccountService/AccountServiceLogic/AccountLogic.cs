@@ -1,4 +1,5 @@
-using AccountServiceDAL;
+﻿using AccountServiceDAL;
+using AccountServiceMessageBusProducer;
 using AccountServiceModels;
 using AccountServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -64,5 +65,9 @@ public class AccountLogic : IAccountLogic
         return true;
 
     }
+
+    public int GetAccountIdFromGoogleId(string googleId)
+    {
+        return _repository.GetAccountIdFromGoogleId(googleId) ?? -1;
     }
 }

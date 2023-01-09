@@ -1,4 +1,4 @@
-﻿using ForumServiceModels;
+using ForumServiceModels;
 using ForumServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -53,5 +53,20 @@ public class ForumRepository : IForumRepository
     {
         _context.Accounts.Add(account);
         return _context.SaveChanges() > 0;
+    }
+    
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
     }
 }

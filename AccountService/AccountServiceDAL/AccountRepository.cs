@@ -46,4 +46,19 @@ public class AccountRepository : IAccountRepository
     {
         return _context.Accounts.Any(e => e.Name == name);
     }
+
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
+    }
 }

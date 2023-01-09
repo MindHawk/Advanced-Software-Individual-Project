@@ -12,4 +12,5 @@ public interface IPostLogic
     public Comment? AddComment(Comment comment);
     public Comment? UpdateComment(Comment comment);
     public bool DeleteComment(int id);
+    public int GetAccountIdFromGoogleId(string googleId);
 }

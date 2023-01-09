@@ -7,4 +7,5 @@ public interface IAccountLogic
     public Account? AddAccount(Account account);
     public Account? UpdateAccount(Account account);
     public bool DeleteAccount(int id);
+    public int GetAccountIdFromGoogleId(string googleId);
 }
