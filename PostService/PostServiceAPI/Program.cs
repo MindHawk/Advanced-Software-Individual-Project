@@ -3,6 +3,7 @@ using PostServiceLogic;
 using PostServiceMessageBus;
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using PostServiceAPI.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 string? runningEnvironment = Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT");
@@ -33,13 +34,38 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostLogic, PostLogic>();
-builder.Services.AddHostedService<MessageBusListener>();
+builder.Services.AddScoped<IPostMessageBusLogic, PostMessageBusLogic>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
+builder.Services.AddHostedService<PostMessageBusConsumer>();
 
 var app = builder.Build();
 
 app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
+
+switch (runningEnvironment)
+{
+    case ("docker"):
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<PostContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            // DbInitializer.Initialize(context);
+        }
+        break;
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -55,6 +81,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

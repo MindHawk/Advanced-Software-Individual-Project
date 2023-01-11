@@ -1,4 +1,5 @@
 using AccountServiceLogic;
+using AccountServiceMessageBusProducer;
 using AccountServiceModels;
 using AccountServiceModels.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ namespace AccountServiceTest;
 public class LogicTest
 {
     private readonly Mock<IAccountRepository> _mockRepo;
+    private readonly Mock<AccountMessageBusProducer> _mockMessageBus;
     private readonly AccountLogic _logic;
     private readonly Account _defaultAccount;
     private readonly Account _secondAccount;
@@ -17,7 +19,8 @@ public class LogicTest
     {
         Mock<ILogger<AccountLogic>> mockServiceLogger = new();
         _mockRepo = new Mock<IAccountRepository>();
-        _logic = new AccountLogic(mockServiceLogger.Object, _mockRepo.Object);
+        _mockMessageBus = new Mock<AccountMessageBusProducer>();
+        _logic = new AccountLogic(mockServiceLogger.Object, _mockRepo.Object, _mockMessageBus.Object);
 
         _defaultAccount = new Account{Name = "Test", Id = 0};
         _mockRepo.Setup(repo => repo.GetAccount(_defaultAccount.Id)).Returns(_defaultAccount);

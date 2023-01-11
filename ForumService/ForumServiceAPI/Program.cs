@@ -1,7 +1,11 @@
+using System.Text;
+using ForumServiceAPI.Attributes;
 using ForumServiceDAL;
 using ForumServiceLogic;
 using ForumServiceMessageBus;
+using ForumServiceMessageBusProducer;
 using ForumServiceModels.Interfaces;
+using Google.Apis.Auth.AspNetCore3;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,13 +36,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<IForumRepository, ForumRepository>();
 builder.Services.AddScoped<IForumLogic, ForumLogic>();
-builder.Services.AddHostedService<MessageBusListener>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
+builder.Services.AddScoped<ForumMessageBusProducer>();
+builder.Services.AddHostedService<ForumMessageBusConsumer>();
 
 var app = builder.Build();
 
 app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
+
+switch (runningEnvironment)
+{
+    case ("docker"):
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<ForumContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
+        break;
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,6 +82,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

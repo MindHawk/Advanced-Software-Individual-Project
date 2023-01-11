@@ -4,14 +4,16 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>ForumServiceMessageBus</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PostServiceDAL\PostServiceDAL.csproj" />
-      <ProjectReference Include="..\PostServiceModels\PostServiceModels.csproj" />
+      <ProjectReference Include="..\ForumServiceDAL\ForumServiceDAL.csproj" />
+      <ProjectReference Include="..\ForumServiceModels\ForumServiceModels.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
       <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>

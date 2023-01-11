@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AccountServiceDAL\AccountServiceDAL.csproj"/>
-        <ProjectReference Include="..\AccountServiceModels\AccountServiceModels.csproj"/>
+        <ProjectReference Include="..\AccountServiceDAL\AccountServiceDAL.csproj" />
+        <ProjectReference Include="..\AccountServiceMessageBusProducer\AccountServiceMessageBusProducer.csproj" />
+        <ProjectReference Include="..\AccountServiceModels\AccountServiceModels.csproj" />
     </ItemGroup>
 
 </Project>

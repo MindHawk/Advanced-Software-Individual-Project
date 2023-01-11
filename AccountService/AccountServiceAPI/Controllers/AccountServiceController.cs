@@ -1,6 +1,8 @@
 using AccountServiceModels.Interfaces;
 using AccountServiceModels;
 using Microsoft.AspNetCore.Mvc;
+using AccountServiceAPI.Attributes;
+using Google.Apis.Auth;
 
 namespace AccountServiceAPI.Controllers;
 
@@ -10,13 +12,15 @@ public class AccountServiceController : ControllerBase
 {
     private readonly ILogger<AccountServiceController> _logger;
     private readonly IAccountLogic _accountLogic;
-
-    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic accountLogic)
+    private readonly IConfiguration _configuration;
+    
+    public AccountServiceController(ILogger<AccountServiceController> logger, IAccountLogic accountLogic, IConfiguration configuration)
     {
         _logger = logger;
         _accountLogic = accountLogic;
+        _configuration = configuration;
     }
-
+    
     [HttpGet("GetAccounts")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Account>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -26,7 +30,7 @@ public class AccountServiceController : ControllerBase
         return Ok(accounts);
     }
 
-    [HttpGet("GetAccount/{id}")]
+    [HttpGet("GetAccount/{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetAccount(int id)
@@ -34,51 +38,61 @@ public class AccountServiceController : ControllerBase
         var account = _accountLogic.GetAccount(id);
         if (account is null)
         {
-            _logger.Log(LogLevel.Information, "Account with id {id} not found", id);
+            _logger.Log(LogLevel.Information, "Account with id {Id} not found", id);
             return NotFound();
         }
         return Ok(account);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostAccount")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Account))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult PostAccount(Account account)
+    public IActionResult PostAccount()
     {
-        var result = _accountLogic.AddAccount(account);
+        (int _, string googleId, string username) = GetTokenInfo();
+        if(googleId == "" || username == "")
+        {
+            _logger.Log(LogLevel.Error, "Google id or username not found in token");
+            return BadRequest();
+        }
+        Account account = new() { GoogleId = googleId, Name = username };
+        Account? result = _accountLogic.AddAccount(account);
         if (result is null)
         {
-            _logger.Log(LogLevel.Information, "Account with name {name} attempted to be created, but already exists", account.Name);
+            _logger.Log(LogLevel.Information, "Account with name {Name} attempted to be created, but already exists", account.Name);
             return BadRequest();
         }
         return Created($"GetAccount/{result.Name}", result);
     }
 
-    [HttpPut("PutAccount")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Account))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult PutAccount(Account account)
-    {
-        var result = _accountLogic.UpdateAccount(account);
-        if (result is null)
-        {
-            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be updated, but does not exist", account.Id);
-            return NotFound();
-        }
-        return Ok(result);
-    }
-    
-    [HttpDelete("DeleteAccount/{id}")]
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
+    [HttpDelete("DeleteAccount")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeleteAccount(int id)
+    public IActionResult DeleteAccount()
     {
-        var result = _accountLogic.DeleteAccount(id);
+        (int id, string googleId, string username) = GetTokenInfo();
+        if(id == -1)
+        {
+            _logger.Log(LogLevel.Error, "User id not found in token");
+            return BadRequest();
+        }
+        bool result = _accountLogic.DeleteAccount(id);
         if (result is false)
         {
-            _logger.Log(LogLevel.Information, "Account with id {id} attempted to be deleted, but does not exist", id);
+            _logger.LogInformation("Account with id {Id} attempted to be deleted, but does not exist", id);
             return NotFound();
         }
         return Ok();
+    }
+
+    private (int, string, string) GetTokenInfo()
+    {
+        string googleId = HttpContext.Items["GoogleId"] as string ?? "";
+        string username = HttpContext.Items["Username"] as string ?? "";
+        _logger.LogInformation("GoogleId: {GoogleId}, Username: {Username}", googleId, username);
+        int id = _accountLogic.GetAccountIdFromGoogleId(googleId);
+        return (id, googleId, username);
     }
 }

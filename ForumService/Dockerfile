@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -12,7 +12,8 @@ COPY ["ForumServiceAPI/ForumServiceAPI.csproj", "ForumServiceAPI/"]
 COPY ["ForumServiceDAL/ForumServiceDAL.csproj", "ForumServiceDAL/"]
 COPY ["ForumServiceLogic/ForumServiceLogic.csproj", "ForumServiceLogic/"]
 COPY ["ForumServiceModels/ForumServiceModels.csproj", "ForumServiceModels/"]
-COPY ["ForumServiceMessageBus/ForumServiceMessageBus.csproj", "ForumServiceMessageBus/"]
+COPY ["ForumServiceMessageBusConsumer/ForumServiceMessageBusConsumer.csproj", "ForumServiceMessageBusConsumer/"]
+COPY ["ForumServiceMessageBusProducer/ForumServiceMessageBusProducer.csproj", "ForumServiceMessageBusProducer/"]
 RUN dotnet restore "ForumServiceAPI/ForumServiceAPI.csproj"
 COPY . .
 WORKDIR "/src/ForumServiceAPI"

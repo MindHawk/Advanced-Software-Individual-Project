@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -12,7 +12,8 @@ COPY ["PostServiceAPI/PostServiceAPI.csproj", "PostServiceAPI/"]
 COPY ["PostServiceDAL/PostServiceDAL.csproj", "PostServiceDAL/"]
 COPY ["PostServiceLogic/PostServiceLogic.csproj", "PostServiceLogic/"]
 COPY ["PostServiceModels/PostServiceModels.csproj", "PostServiceModels/"]
-COPY ["PostServiceMessageBus/PostServiceMessageBus.csproj", "PostServiceMessageBus/"]
+COPY ["PostServiceMessageBusProducer/PostServiceMessageBusProducer.csproj", "PostServiceMessageBusProducer/"]
+COPY ["PostServiceMessageBusConsumer/PostServiceMessageBusConsumer.csproj", "PostServiceMessageBusConsumer/"]
 RUN dotnet restore "PostServiceAPI/PostServiceAPI.csproj"
 COPY . .
 WORKDIR "/src/PostServiceAPI"

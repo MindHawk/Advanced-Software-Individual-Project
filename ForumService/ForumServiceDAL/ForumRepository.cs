@@ -11,24 +11,22 @@ public class ForumRepository : IForumRepository
     public ForumRepository(ForumContext context)
     {
         _context = context;
-        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
-        {
-            _context.Database.Migrate();
-        }
     }
     public Forum? GetForum(string name)
     {
-        return _context.Forums.Find(name);
+        Forum? forum = _context.Forums.Find(name);
+        return forum?.Deleted == true ? null : forum;
     }
 
     public IEnumerable<Forum> GetForums()
     {
-        return _context.Forums.ToList();
+        return _context.Forums.Where(f => f.Deleted == false).ToList();
     }
 
     public bool AddForum(Forum forum)
     {
         _context.Forums.Add(forum);
+        forum.Deleted = false;
         return _context.SaveChanges() > 0;
     }
 
@@ -42,12 +40,39 @@ public class ForumRepository : IForumRepository
     {
         Forum? forum = GetForum(name);
         if (forum == null) return false;
-        _context.Forums.Remove(forum);
-        return _context.SaveChanges() > 0;
+        forum.Deleted = true;
+        return UpdateForum(forum);
     }
     
     public bool ForumExists(string name)
     {
         return _context.Forums.Any(e => e.Name == name);
+    }
+
+    public bool AddAccount(Account account)
+    {
+        _context.Accounts.Add(account);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool DeleteAccount(Account account)
+    {
+        _context.Accounts.Remove(account);
+        return _context.SaveChanges() > 0;
+    }
+
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
     }
 }

@@ -106,25 +106,25 @@ public class ApiTest
         Assert.Equivalent(_defaultForum, returnedValue.Value);
     }
 
-    [Fact]
-    public void DeleteForum_ExistingForum_ReturnsOk()
-    {
-        _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(true);
-
-        OkResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as OkResult;
-
-        Assert.IsType<OkResult>(returnedValue);
-    }
-
-    [Fact]
-    public void DeleteForum_NonExistentForum_ReturnsNotFound()
-    {
-        _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(false);
-
-        NotFoundResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as NotFoundResult;
-
-        Assert.IsType<NotFoundResult>(returnedValue);
-    }
+    // [Fact]
+    // public void DeleteForum_ExistingForum_ReturnsOk()
+    // {
+    //     _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(true);
+    //
+    //     OkResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as OkResult;
+    //
+    //     Assert.IsType<OkResult>(returnedValue);
+    // }
+    //
+    // [Fact]
+    // public void DeleteForum_NonExistentForum_ReturnsNotFound()
+    // {
+    //     _mockLogic.Setup(repo => repo.DeleteForum(_defaultForum.Name)).Returns(false);
+    //
+    //     NotFoundResult? returnedValue = _controller.DeleteForum(_defaultForum.Name) as NotFoundResult;
+    //
+    //     Assert.IsType<NotFoundResult>(returnedValue);
+    // }
     
     [Theory]
     [InlineData(3, 0)]

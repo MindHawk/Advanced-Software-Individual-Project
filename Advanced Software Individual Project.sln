@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservice Producer", "Microservice Producer\Microservice Producer.csproj", "{FE9E0D6E-DE21-404B-A2E4-244AB1F68513}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceAPI", "ForumService\ForumServiceAPI\ForumServiceAPI.csproj", "{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Forum Service", "Forum Service", "{98B4D01D-F254-4035-923F-E8A3B3297E77}"
@@ -12,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceDAL", "ForumSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceLogic", "ForumService\ForumServiceLogic\ForumServiceLogic.csproj", "{E3C226A1-61D4-471A-A88D-70544E10DEBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBus", "ForumService\ForumServiceMessageBus\ForumServiceMessageBus.csproj", "{67FE7EF4-7B79-444D-8D47-E4EE4E787815}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBusConsumer", "ForumService\ForumServiceMessageBusConsumer\ForumServiceMessageBusConsumer.csproj", "{67FE7EF4-7B79-444D-8D47-E4EE4E787815}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceTest", "ForumService\ForumServiceTest\ForumServiceTest.csproj", "{538891E4-DC66-481A-9A3C-A0E000F4ADE9}"
 EndProject
@@ -24,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceAPI", "Accoun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceLogic", "AccountService\AccountServiceLogic\AccountServiceLogic.csproj", "{B1213A70-CFF2-43DF-8B7A-D7BB6EC2C5C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceMessageBus", "AccountService\AccountServiceMessageBus\AccountServiceMessageBus.csproj", "{40AFC283-BBCF-47CB-B70D-D9EF47DCA89F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceMessageBusProducer", "AccountService\AccountServiceMessageBusProducer\AccountServiceMessageBusProducer.csproj", "{40AFC283-BBCF-47CB-B70D-D9EF47DCA89F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountServiceModels", "AccountService\AccountServiceModels\AccountServiceModels.csproj", "{CA30473A-5F07-4CB0-BC13-19B92AE29E43}"
 EndProject
@@ -40,11 +38,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceDAL", "PostServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceLogic", "PostService\PostServiceLogic\PostServiceLogic.csproj", "{EBC3C83E-B17D-4FEE-90A1-097DAADE71D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceMessageBus", "PostService\PostServiceMessageBus\PostServiceMessageBus.csproj", "{4E8FDB42-769B-46B5-BB3E-09475289D1D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceMessageBusConsumer", "PostService\PostServiceMessageBusConsumer\PostServiceMessageBusConsumer.csproj", "{4E8FDB42-769B-46B5-BB3E-09475289D1D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceModels", "PostService\PostServiceModels\PostServiceModels.csproj", "{7D3D63CC-EB35-4FEF-93B8-83B931012C35}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceTest", "PostService\PostServiceTest\PostServiceTest.csproj", "{05DABCF1-A46E-4C36-96CA-DE29534EB1D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostServiceMessageBusProducer", "PostService\PostServiceMessageBusProducer\PostServiceMessageBusProducer.csproj", "{10634A64-F097-4D6B-AD79-2058C53C735F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumServiceMessageBusProducer", "ForumService\ForumServiceMessageBusProducer\ForumServiceMessageBusProducer.csproj", "{65F54141-2169-4027-A15F-CDC27976070F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +54,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE9E0D6E-DE21-404B-A2E4-244AB1F68513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE9E0D6E-DE21-404B-A2E4-244AB1F68513}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE9E0D6E-DE21-404B-A2E4-244AB1F68513}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE9E0D6E-DE21-404B-A2E4-244AB1F68513}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -132,6 +130,14 @@ Global
 		{05DABCF1-A46E-4C36-96CA-DE29534EB1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05DABCF1-A46E-4C36-96CA-DE29534EB1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05DABCF1-A46E-4C36-96CA-DE29534EB1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10634A64-F097-4D6B-AD79-2058C53C735F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10634A64-F097-4D6B-AD79-2058C53C735F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10634A64-F097-4D6B-AD79-2058C53C735F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10634A64-F097-4D6B-AD79-2058C53C735F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65F54141-2169-4027-A15F-CDC27976070F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65F54141-2169-4027-A15F-CDC27976070F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65F54141-2169-4027-A15F-CDC27976070F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65F54141-2169-4027-A15F-CDC27976070F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{37BCAFC6-CEED-4081-8EEE-BC39A102FDE7} = {98B4D01D-F254-4035-923F-E8A3B3297E77}
@@ -152,5 +158,7 @@ Global
 		{4E8FDB42-769B-46B5-BB3E-09475289D1D3} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
 		{7D3D63CC-EB35-4FEF-93B8-83B931012C35} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
 		{05DABCF1-A46E-4C36-96CA-DE29534EB1D7} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
+		{10634A64-F097-4D6B-AD79-2058C53C735F} = {F8755BB2-EF9C-4A7C-B4CF-A09C48D9DB95}
+		{65F54141-2169-4027-A15F-CDC27976070F} = {98B4D01D-F254-4035-923F-E8A3B3297E77}
 	EndGlobalSection
 EndGlobal

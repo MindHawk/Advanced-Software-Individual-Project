@@ -43,30 +43,6 @@ public class LogicTest
     }
 
     [Fact]
-    public void GetPosts_ExistingPosts_ReturnsPosts()
-    {
-        List<Post> PostList = new List<Post> { _defaultPost, _secondPost };
-        _mockRepo.Setup(repo => repo.GetPosts()).Returns(PostList);
-        
-        var returnedValue = _logic.GetPosts();
-        
-        Assert.NotNull(returnedValue);
-        Assert.Equivalent(PostList, returnedValue);
-    }
-    
-    [Fact]
-    public void GetPosts_NoExistingPost_ReturnsEmptyPosts()
-    {
-        List<Post> PostList = new List<Post>();
-        _mockRepo.Setup(repo => repo.GetPosts()).Returns(PostList);
-        
-        var returnedValue = _logic.GetPosts();
-        
-        Assert.NotNull(returnedValue);
-        Assert.Empty(returnedValue);
-    }
-    
-    [Fact]
     public void PostPost_NewPost_ReturnsPost()
     {
         _mockRepo.Setup(repo => repo.AddPost(_secondPost)).Returns(true);

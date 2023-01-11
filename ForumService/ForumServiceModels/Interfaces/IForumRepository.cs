@@ -7,5 +7,12 @@ public interface IForumRepository
     public bool AddForum(Forum forum);
     public bool UpdateForum(Forum forum);
     public bool DeleteForum(string name);
+    /// <summary>
+    /// This method checks if a forum with the given name exists, even if it is deleted.
+    /// This method should not be returnable through the API.
+    /// </summary>
     public bool ForumExists(string name);
+    public bool AddAccount(Account account);
+    public bool DeleteAccount(Account account);
+    public int? GetAccountIdFromGoogleId(string googleId);
 }

@@ -1,4 +1,5 @@
-﻿using PostServiceModels;
+﻿using System.ComponentModel.Design;
+using PostServiceModels;
 using PostServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,19 +12,19 @@ public class PostRepository : IPostRepository
     public PostRepository(PostContext context)
     {
         _context = context;
-        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
-        {
-            _context.Database.Migrate();
-        }
     }
     public Post? GetPost(int id)
     {
         return _context.Posts.Find(id);
     }
 
-    public IEnumerable<Post> GetPosts()
+    public IEnumerable<Post>? GetPosts(string forumName)
     {
-        return _context.Posts.ToList();
+        if (ForumExists(forumName))
+        {
+            return _context.Posts.Where(p => p.Forum == forumName && p.Deleted == false).ToList();
+        }
+        return null;
     }
 
     public bool AddPost(Post post)
@@ -42,18 +43,20 @@ public class PostRepository : IPostRepository
     {
         Post? post = GetPost(id);
         if (post == null) return false;
-        _context.Posts.Remove(post);
-        return _context.SaveChanges() > 0;
+        post.Deleted = true;
+        post.Content = "This post has been deleted";
+        post.Author = -1;
+        return UpdatePost(post);
     }
     
     public bool PostExists(int id)
     {
-        return _context.Posts.Any(e => e.Id == id);
+        return _context.Posts.Any(e => e.Id == id && e.Deleted == false);
     }
 
     public List<Comment> GetCommentsForPost(int postId)
     {
-        return _context.Comments.Where(c => c.PostId == postId).ToList();
+        return _context.Comments.Where(c => c.PostId == postId && c.Deleted == false).ToList();
     }
 
     public bool AddComment(Comment comment)
@@ -72,17 +75,58 @@ public class PostRepository : IPostRepository
     {
         Comment? comment = _context.Comments.Find(id);
         if (comment == null) return false;
-        _context.Comments.Remove(comment);
-        return _context.SaveChanges() > 0;
+        comment.Deleted = true;
+        comment.Content = "This comment has been deleted";
+        comment.Author = -1;
+        return UpdateComment(comment);
     }
 
     public bool CommentExists(int id)
     {
-        return _context.Comments.Any(e => e.Id == id);
+        return _context.Comments.Any(e => e.Id == id && e.Deleted == false);
     }
 
     public Comment? GetComment(int id)
     {
         return _context.Comments.Find(id);
+    }
+
+    public bool ForumExists(string name)
+    {
+        return _context.Forums.Any(e => e.Name == name && e.Deleted == false);
+    }
+
+    public bool AddForum(Forum forum)
+    {
+        _context.Forums.Add(forum);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool DeleteForum(Forum forum)
+    {
+        forum.Deleted = true;
+        _context.Forums.Update(forum);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool AddAccount(Account account)
+    {
+        _context.Accounts.Add(account);
+        return _context.SaveChanges() > 0;
+    }
+    
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
     }
 }

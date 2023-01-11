@@ -1,6 +1,7 @@
+using AccountServiceAPI.Attributes;
 using AccountServiceDAL;
 using AccountServiceLogic;
-using AccountServiceMessageBus;
+using AccountServiceMessageBusProducer;
 using AccountServiceModels.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,13 +33,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountLogic, AccountLogic>();
-builder.Services.AddHostedService<MessageBusListener>();
+builder.Services.AddScoped<AccountMessageBusProducer>();
+builder.Services.AddScoped<AuthorizeGoogleTokenAttribute>();
 
 var app = builder.Build();
 
 app.Logger.LogInformation("Running environment is: {RunningEnvironment}", runningEnvironment);
+
+switch (runningEnvironment)
+{
+    case ("docker"):
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<AccountContext>();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
+        break;
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -54,6 +79,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

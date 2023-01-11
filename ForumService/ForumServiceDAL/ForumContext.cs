@@ -10,4 +10,5 @@ public class ForumContext : DbContext
     }
 
     public DbSet<Forum> Forums { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 }

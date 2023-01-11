@@ -1,6 +1,7 @@
 using PostServiceModels;
 using PostServiceModels.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using PostServiceAPI.Attributes;
 
 namespace PostServiceAPI.Controllers;
 
@@ -17,12 +18,17 @@ public class PostServiceController : ControllerBase
         _postLogic = postLogic;
     }
 
-    [HttpGet("GetPosts")]
+    [HttpGet("GetPosts/{forumName}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Post>) )]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetPosts()
+    public IActionResult GetPosts(string forumName)
     {
-        var posts = _postLogic.GetPosts();
+        var posts = _postLogic.GetPosts(forumName);
+        if (posts == null)
+        {
+            _logger.LogInformation("Forum {ForumName} not found", forumName);
+            return NotFound("Forum does not exist");
+        }
         return Ok(posts);
     }
     
@@ -31,6 +37,11 @@ public class PostServiceController : ControllerBase
     public IActionResult GetPostWithComments(int postId)
     {
         (Post post, List<Comment> comments) result = _postLogic.GetPostWithComments(postId);
+        if (result is (null, null))
+        {
+            _logger.LogInformation("Post {PostId} not found", postId);
+            return NotFound("Post not found");
+        }
         return Ok(result);
     }
     
@@ -39,6 +50,11 @@ public class PostServiceController : ControllerBase
     public IActionResult GetCommentsForPost(int postId)
     {
         var comments = _postLogic.GetCommentsForPost(postId);
+        if (comments is null)
+        {
+            _logger.LogInformation("Post {PostId} not found", postId);
+            return NotFound("Post not found");
+        }
         return Ok(comments);
     }
 
@@ -56,6 +72,7 @@ public class PostServiceController : ControllerBase
         return Ok(post);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostPost")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,6 +87,7 @@ public class PostServiceController : ControllerBase
         return Created($"GetPost/{result.Id}", result);
     }
 
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPut("PutPost")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Post))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,6 +102,7 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpDelete("DeletePost/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -98,6 +117,7 @@ public class PostServiceController : ControllerBase
         return Ok();
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPost("PostComment")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Comment))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -112,6 +132,7 @@ public class PostServiceController : ControllerBase
         return Created($"GetComment/{result.Id}", result);
     }
     
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpPut("PutComment")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Comment))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -126,6 +147,7 @@ public class PostServiceController : ControllerBase
         return Ok(result);
     }
 
+    [ServiceFilter(typeof(AuthorizeGoogleTokenAttribute))]
     [HttpDelete("DeleteComment/{postId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -139,5 +161,12 @@ public class PostServiceController : ControllerBase
         }
 
         return Ok();
+    }
+    
+    private int GetIdFromGoogleId()
+    {
+        string googleId = HttpContext.Items["GoogleId"] as string ?? "";
+        int id = _postLogic.GetAccountIdFromGoogleId(googleId);
+        return id;
     }
 }

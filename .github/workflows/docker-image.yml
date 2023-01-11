@@ -28,6 +28,8 @@ jobs:
               - 'Api Gateway/**'
             ForumService:
               - 'ForumService/**'
+            PostService:
+              - 'PostService/**'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -47,7 +49,7 @@ jobs:
         with:
           context: ./AccountService
           push: true
-          tags: mindhawk/advanced-software-individual-project:accountservice
+          tags: mindhawk/advanced-software-individual-project-account-service:accountservice
           labels: ${{ steps.meta.output.labels }}
 
       - name: Build and publish Forum Service Docker image
@@ -56,7 +58,16 @@ jobs:
         with:
           context: ./ForumService
           push: true
-          tags: mindhawk/advanced-software-individual-project:forumservice
+          tags: mindhawk/advanced-software-individual-project-forum-service:forumservice
+          labels: ${{ steps.meta.output.labels }}
+          
+      - name: Build and publish Post Service Docker image
+        if: steps.filter.outputs.PostService == 'true'
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ./PostService
+          push: true
+          tags: mindhawk/advanced-software-individual-project-post-service:postservice
           labels: ${{ steps.meta.output.labels }}
 
       - name: Build and publish API Gateway Docker image
@@ -65,5 +76,5 @@ jobs:
         with:
           context: "./API Gateway"
           push: true
-          tags: mindhawk/advanced-software-individual-project:apigateway
+          tags: mindhawk/advanced-software-individual-project-api-gateway:apigateway
           labels: ${{ steps.meta.output.labels }}

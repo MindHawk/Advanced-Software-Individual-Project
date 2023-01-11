@@ -47,10 +47,10 @@ public class PostLogic : IPostLogic
         return post;
     }
 
-    public IEnumerable<Post> GetPosts()
+    public IEnumerable<Post>? GetPosts(string forumName)
     {
-        _logger.Log(LogLevel.Information, "Getting all Posts");
-        return _repository.GetPosts();
+        _logger.Log(LogLevel.Information, "Getting all Posts for forum {ForumName}", forumName);
+        return _repository.GetPosts(forumName);
     }
 
     public Post? AddPost(Post post)
@@ -60,12 +60,12 @@ public class PostLogic : IPostLogic
             _logger.Log(LogLevel.Information, "Post with id {Id} already exists", post.Id);
             return null;
         }
-        _logger.Log(LogLevel.Information, "Adding post with id {Id}", post.Id);
-        if (_repository.AddPost(post))
+        if (!_repository.ForumExists(post.Forum))
         {
-            return _repository.GetPost(post.Id);
+            _logger.LogInformation("Forum {Forum} does not exist for post {Id}", post.Forum, post.Id);
         }
-        return null;
+        _logger.Log(LogLevel.Information, "Adding post with id {Id}", post.Id);
+        return _repository.AddPost(post) ? _repository.GetPost(post.Id) : null;
     }
 
     public Post? UpdatePost(Post post)
@@ -111,5 +111,10 @@ public class PostLogic : IPostLogic
     {
         _logger.Log(LogLevel.Information, "Deleting comment with id {Id}", id);
         return _repository.DeleteComment(id);
+    }
+    
+    public int GetAccountIdFromGoogleId(string googleId)
+    {
+        return _repository.GetAccountIdFromGoogleId(googleId) ?? -1;
     }
 }

@@ -28,6 +28,8 @@ services:
     build:
       context: "./ForumService"
       dockerfile: "Dockerfile"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8090:80"
     depends_on:
@@ -47,27 +49,42 @@ services:
     build:
       context: "./AccountService"
       dockerfile: "Dockerfile"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8093:80"
     depends_on:
       - rabbitmq
       - account_db
-  producer:
-    container_name: producer
+  post_db:
+    container_name: post_db
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "8094:5432"
+  post_service:
+    container_name: post_service
     restart: always
     build:
-      context: "./Microservice Producer"
+      context: "./PostService"
       dockerfile: "Dockerfile"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8095:80"
     depends_on:
       - rabbitmq
+      - account_db
   api_gateway:
     container_name: api_gateway
     restart: always
     build:
       context: "./API Gateway"
       dockerfile: "Dockerfile"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8100:80"
     depends_on:

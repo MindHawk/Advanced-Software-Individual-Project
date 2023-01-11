@@ -11,10 +11,6 @@ public class AccountRepository : IAccountRepository
     public AccountRepository(AccountContext context)
     {
         _context = context;
-        if (Environment.GetEnvironmentVariable("HOSTED_ENVIRONMENT") == "docker")
-        {
-            _context.Database.Migrate();
-        }
     }
     public Account? GetAccount(int id)
     {
@@ -49,5 +45,20 @@ public class AccountRepository : IAccountRepository
     public bool AccountExists(string name)
     {
         return _context.Accounts.Any(e => e.Name == name);
+    }
+
+    public int? GetAccountIdFromGoogleId(string googleId)
+    {
+        int id;
+        try
+        {
+            id = _context.Accounts.First(e => e.GoogleId == googleId).Id;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+
+        return id;
     }
 }

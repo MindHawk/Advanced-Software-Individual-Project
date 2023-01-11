@@ -11,9 +11,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("Ocelot.json", false, true)
+    //.AddJsonFile("Ocelot.json", false, true)
+    .AddJsonFile($"Ocelot.{builder.Environment.EnvironmentName}.json", false, true)
     .AddEnvironmentVariables();
 builder.Services.AddOcelot(builder.Configuration);
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+    {
+        b.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -29,6 +38,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors();
 
 await app.UseOcelot();
 
