@@ -21,7 +21,10 @@ switch (runningEnvironment)
             x => x.MigrationsAssembly("PostServiceAPI")));
         break;
     case ("kubernetes"):
-        builder.Services.AddDbContext<PostContext>(options => options.UseInMemoryDatabase("AccountService"));
+        connectionString = builder.Configuration.GetConnectionString("CloudDBConnectionString") ?? string.Empty;
+        builder.Services.AddDbContext<PostContext>(options => options.UseSqlServer(
+            connectionString, 
+            x => x.MigrationsAssembly("PostServiceAPI")));
         break;
     default:
         builder.Services.AddDbContext<PostContext>(options => options.UseInMemoryDatabase("AccountService"));
@@ -60,7 +63,7 @@ switch (runningEnvironment)
             var services = scope.ServiceProvider;
 
             var context = services.GetRequiredService<PostContext>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             // DbInitializer.Initialize(context);
         }

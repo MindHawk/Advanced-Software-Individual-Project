@@ -12,16 +12,20 @@ string? runningEnvironment = Environment.GetEnvironmentVariable("HOSTED_ENVIRONM
 // While running locally or debugging, an in-memory database is used.
 // When running (locally) in docker, a dockerized postgres database is used.
 // When running in kubernetes, a cloud database is used.
+string connectionString = "";
 switch (runningEnvironment)
 {
     case ("docker"):
-        string connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString");
+        connectionString = builder.Configuration.GetConnectionString("PostgresConnectionString") ?? string.Empty;
         builder.Services.AddDbContext<AccountContext>(options => options.UseNpgsql(
             connectionString, 
             x => x.MigrationsAssembly("AccountServiceAPI")));
         break;
     case ("kubernetes"):
-        builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
+        connectionString = builder.Configuration.GetConnectionString("CloudDBConnectionString") ?? string.Empty;
+        builder.Services.AddDbContext<AccountContext>(options => options.UseSqlServer(
+            connectionString, 
+            x => x.MigrationsAssembly("AccountServiceAPI")));
         break;
     default:
         builder.Services.AddDbContext<AccountContext>(options => options.UseInMemoryDatabase("AccountService"));
@@ -58,7 +62,7 @@ switch (runningEnvironment)
             var services = scope.ServiceProvider;
 
             var context = services.GetRequiredService<AccountContext>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
         }
         break;

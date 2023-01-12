@@ -24,7 +24,10 @@ switch (runningEnvironment)
             x => x.MigrationsAssembly("ForumServiceAPI")));
         break;
     case ("kubernetes"):
-        builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
+        connectionString = builder.Configuration.GetConnectionString("CloudDBConnectionString") ?? string.Empty;
+        builder.Services.AddDbContext<ForumContext>(options => options.UseSqlServer(
+            connectionString, 
+            x => x.MigrationsAssembly("ForumServiceAPI")));
         break;
     default:
         builder.Services.AddDbContext<ForumContext>(options => options.UseInMemoryDatabase("ForumService"));
@@ -62,7 +65,7 @@ switch (runningEnvironment)
             var services = scope.ServiceProvider;
 
             var context = services.GetRequiredService<ForumContext>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
         }
         break;
